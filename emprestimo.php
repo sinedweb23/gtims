@@ -190,7 +190,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['chromebookIDs'])) {
         <tbody id="chromebooksLoanBody">
             <?php
             // Seleciona os Chromebooks emprestados
-            $sql = "SELECT Chromebooks.Nome AS NomeChromebook, Emprestimos.* FROM Chromebooks INNER JOIN Emprestimos ON Chromebooks.ID = Emprestimos.ChromebookID";
+            $sql = "SELECT chromebooks.Nome AS NomeChromebook, Emprestimos.* FROM chromebooks INNER JOIN emprestimos ON Chromebooks.ID = emprestimos.ChromebookID";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
