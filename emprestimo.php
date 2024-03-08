@@ -19,9 +19,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['emprestimoID'])) {
             $conn->begin_transaction();
             
             // Atualiza a disponibilidade do Chromebook para disponível
-            $sql_update = "UPDATE Chromebooks SET Disponivel = 1 WHERE ID = $chromebookID";
+            $sql_update = "UPDATE chromebooks SET Disponivel = 1 WHERE ID = $chromebookID";
             if ($conn->query($sql_update) !== TRUE) {
-                echo "Erro ao atualizar disponibilidade do Chromebook: " . $conn->error;
+                echo "Erro ao atualizar disponibilidade do chromebook: " . $conn->error;
                 $conn->rollback(); // Desfaz a transação em caso de erro
                 exit;
             }
