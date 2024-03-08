@@ -131,10 +131,10 @@
         });
     </script>
 
-    <!-- Novo Dashboard: Chromebooks emprestados por mais de 1 dia sem devolução -->
-    <h2>Chromebooks emprestados por mais de 1 dia sem devolução</h2>
+    <!-- Novo Dashboard: chromebooks emprestados por mais de 1 dia sem devolução -->
+    <h2>chromebooks emprestados por mais de 1 dia sem devolução</h2>
     <div style="margin: 20px auto;">
-        <canvas id="overdueChromebooksChart"></canvas>
+        <canvas id="overduechromebooksChart"></canvas>
     </div>
 
     <script>
@@ -144,7 +144,7 @@
             xhr.onload = function () {
                 if (xhr.status >= 200 && xhr.status < 300) {
                     var data = JSON.parse(xhr.responseText);
-                    renderOverdueChromebooksChart(data);
+                    renderOverduechromebooksChart(data);
                 } else {
                     console.error('Erro ao obter dados: ' + xhr.statusText);
                 }
@@ -154,8 +154,8 @@
             };
             xhr.send();
 
-            function renderOverdueChromebooksChart(data) {
-    var ctx = document.getElementById('overdueChromebooksChart').getContext('2d');
+            function renderOverduechromebooksChart(data) {
+    var ctx = document.getElementById('overduechromebooksChart').getContext('2d');
     var labels = data.map(function (chromebook) {
         return chromebook.NomeChromebook + ' (Usuário: ' + chromebook.Usuario + ')';
     });

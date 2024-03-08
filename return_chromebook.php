@@ -3,10 +3,10 @@ include 'config.php';
 
 $chromebookID = $_POST['chromebookID'];
 
-$sql = "UPDATE Chromebooks SET Disponivel = true WHERE ID = $chromebookID";
+$sql = "UPDATE chromebooks SET Disponivel = true WHERE ID = $chromebookID";
 $conn->query($sql);
 
-$sql = "SELECT * FROM emprestimos WHERE ChromebookID = $chromebookID AND DataDevolucao IS NULL";
+$sql = "SELECT * FROM emprestimos WHERE chromebookID = $chromebookID AND DataDevolucao IS NULL";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();

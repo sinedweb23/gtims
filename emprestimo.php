@@ -5,7 +5,7 @@ include 'config.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['emprestimoID'])) {
     $emprestimoID = $_POST['emprestimoID'];
     
-    // Obtém os IDs dos Chromebooks emprestados
+    // Obtém os IDs dos chromebooks emprestados
     $sql_chromebooks_ids = "SELECT ChromebookID, DataEmprestimo, HoraEmprestimo, Usuario FROM emprestimos WHERE ID = $emprestimoID";
     $result = $conn->query($sql_chromebooks_ids);
     if ($result->num_rows > 0) {
@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['chromebookIDs'])) {
     // Confirma a transação
     $conn->commit();
     
-    echo "Chromebooks emprestados com sucesso!";
+    echo "chromebooks emprestados com sucesso!";
     exit; // Encerra o script após o empréstimo
 }
 ?>
@@ -96,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['chromebookIDs'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciamento de Chromebooks</title>
+    <title>Gerenciamento de chromebooks</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -143,14 +143,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['chromebookIDs'])) {
     </style>
 </head>
 <body>
-    <h1>Gerenciamento de Chromebooks</h1>
+    <h1>Gerenciamento de chromebooks</h1>
 
-    <h2>Empréstimo de Chromebooks</h2>
+    <h2>Empréstimo de chromebooks</h2>
     <form action="" method="post">
-        <label for="chromebookIDs">Selecionar Chromebooks:</label><br>
+        <label for="chromebookIDs">Selecionar chromebooks:</label><br>
         <div class="row">
             <?php
-            // Seleciona os Chromebooks disponíveis
+            // Seleciona os chromebooks disponíveis
             $sql = "SELECT * FROM chromebooks WHERE Disponivel = 1";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
@@ -176,7 +176,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['chromebookIDs'])) {
         <button type="submit">Emprestar</button>
     </form>
 
-    <h2>Chromebooks Emprestados</h2>
+    <h2>chromebooks Emprestados</h2>
     <table>
         <thead>
             <tr>
@@ -189,8 +189,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['chromebookIDs'])) {
         </thead>
         <tbody id="chromebooksLoanBody">
             <?php
-            // Seleciona os Chromebooks emprestados
-            $sql = "SELECT chromebooks.Nome AS NomeChromebook, emprestimos.* FROM chromebooks INNER JOIN emprestimos ON Chromebooks.ID = emprestimos.ChromebookID";
+            // Seleciona os chromebooks emprestados
+            $sql = "SELECT chromebooks.Nome AS NomeChromebook, emprestimos.* FROM chromebooks INNER JOIN emprestimos ON chromebooks.ID = emprestimos.ChromebookID";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {

@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $dataEmprestimo = $_POST['data'];
         $horaEmprestimo = $_POST['hora'];
 
-        $sql = "UPDATE Chromebooks SET Disponivel = false WHERE ID = $chromebookID";
+        $sql = "UPDATE chromebooks SET Disponivel = false WHERE ID = $chromebookID";
         $conn->query($sql);
 
         $sql = "INSERT INTO emprestimos (ChromebookID, NomeUsuario, DataEmprestimo, HoraEmprestimo) VALUES ($chromebookID, '$nomeUsuario', '$dataEmprestimo', '$horaEmprestimo')";

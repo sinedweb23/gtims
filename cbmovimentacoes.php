@@ -14,13 +14,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $sql = "SELECT m.ID, c.Nome AS NomeChromebook, m.DataEmprestimo, m.HoraEmprestimo, m.Usuario, m.DataHoraDevolucao 
             FROM cbmovimentacoes m 
-            INNER JOIN Chromebooks c ON m.ChromebookID = c.ID 
+            INNER JOIN chromebooks c ON m.ChromebookID = c.ID 
             WHERE c.Nome LIKE '%$filtro_chromebook%' AND DATE(m.DataEmprestimo) = '$filtro_data'";
 } else {
     // Seleciona todos os registros se nenhum filtro for aplicado
     $sql = "SELECT m.ID, c.Nome AS NomeChromebook, m.DataEmprestimo, m.HoraEmprestimo, m.Usuario, m.DataHoraDevolucao 
             FROM cbmovimentacoes m 
-            INNER JOIN Chromebooks c ON m.ChromebookID = c.ID";
+            INNER JOIN chromebooks c ON m.ChromebookID = c.ID";
 }
 
 $result = $conn->query($sql);
@@ -31,7 +31,7 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Movimentações de Chromebooks</title>
+    <title>Registro de Movimentações de chromebooks</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -58,7 +58,7 @@ $result = $conn->query($sql);
     </style>
 </head>
 <body>
-    <h1>Registro de Movimentações de Chromebooks</h1>
+    <h1>Registro de Movimentações de chromebooks</h1>
 
     <!-- Formulário de filtro -->
     <form method="post">
@@ -67,8 +67,8 @@ $result = $conn->query($sql);
             <select id="filtro_chromebook" name="filtro_chromebook">
                 <option value="">Selecionar Chromebook</option>
                 <?php
-                // Consulta para obter os nomes dos Chromebooks
-                $sql_chromebooks = "SELECT Nome FROM Chromebooks";
+                // Consulta para obter os nomes dos chromebooks
+                $sql_chromebooks = "SELECT Nome FROM chromebooks";
                 $result_chromebooks = $conn->query($sql_chromebooks);
                 if ($result_chromebooks->num_rows > 0) {
                     while ($row = $result_chromebooks->fetch_assoc()) {
