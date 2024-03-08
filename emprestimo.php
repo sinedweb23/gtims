@@ -151,7 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['chromebookIDs'])) {
         <div class="row">
             <?php
             // Seleciona os Chromebooks disponíveis
-            $sql = "SELECT * FROM Chromebooks WHERE Disponivel = 1";
+            $sql = "SELECT * FROM chromebooks WHERE Disponivel = 1";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 $count = 0;
