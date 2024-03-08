@@ -13,7 +13,7 @@ include 'config.php';
 
 // Obter o nome do usuário a partir do email na sessão
 $email = $_SESSION['email'];
-$sql_usuario = "SELECT Nome FROM Usuario WHERE Email = '$email'";
+$sql_usuario = "SELECT Nome FROM usuario WHERE Email = '$email'";
 $result_usuario = $conn->query($sql_usuario);
 
 if ($result_usuario->num_rows > 0) {
