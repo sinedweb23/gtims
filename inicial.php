@@ -19,6 +19,7 @@
 <body>
     <h1>Dashboard</h1>
 
+    <!-- Dashboard de Produtos com Estoque Baixo -->
     <h2>Produtos com Estoque Baixo</h2>
     <div style="margin: 20px auto;">
         <canvas id="lowStockChart"></canvas>
@@ -76,6 +77,7 @@
         });
     </script>
 
+    <!-- Dashboard de Movimentações por Setor -->
     <h2>Movimentações por Setor</h2>
     <div style="margin: 20px auto;">
         <canvas id="movementsBySectorChart"></canvas>
@@ -126,6 +128,66 @@
                     }
                 });
             }
+        });
+    </script>
+
+    <!-- Novo Dashboard: Chromebooks emprestados por mais de 1 dia sem devolução -->
+    <h2>Chromebooks emprestados por mais de 1 dia sem devolução</h2>
+    <div style="margin: 20px auto;">
+        <canvas id="overdueChromebooksChart"></canvas>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'overdue_chromebooks.php', true);
+            xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    var data = JSON.parse(xhr.responseText);
+                    renderOverdueChromebooksChart(data);
+                } else {
+                    console.error('Erro ao obter dados: ' + xhr.statusText);
+                }
+            };
+            xhr.onerror = function () {
+                console.error('Erro de rede');
+            };
+            xhr.send();
+
+            function renderOverdueChromebooksChart(data) {
+    var ctx = document.getElementById('overdueChromebooksChart').getContext('2d');
+    var labels = data.map(function (chromebook) {
+        return chromebook.NomeChromebook + ' (Usuário: ' + chromebook.Usuario + ')';
+    });
+    var daysLate = data.map(function (chromebook) {
+        return chromebook.DiasAtraso;
+    });
+
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Dias de Atraso',
+                data: daysLate,
+                backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+}
+
+
         });
     </script>
 </body>
