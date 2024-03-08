@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['emprestimoID'])) {
             exit; // Encerra o script após a devolução
         }
     } else {
-        echo "Erro ao obter ID dos Chromebooks emprestados";
+        echo "Erro ao obter ID dos chromebooks emprestados";
     }
 }
 
@@ -69,13 +69,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['chromebookIDs'])) {
         $sql_insert = "INSERT INTO emprestimos (ChromebookID, DataEmprestimo, HoraEmprestimo, Usuario) 
                        VALUES ('$chromebookID', '$dataEmprestimo', '$horaEmprestimo', '$nomeUsuario')";
         if ($conn->query($sql_insert) !== TRUE) {
-            echo "Erro ao emprestar os Chromebooks: " . $conn->error;
+            echo "Erro ao emprestar os chromebooks: " . $conn->error;
             $conn->rollback(); // Desfaz a transação em caso de erro
             exit;
         }
         
         // Atualiza a disponibilidade do Chromebook para indisponível
-        $sql_update = "UPDATE Chromebooks SET Disponivel = 0 WHERE ID = $chromebookID";
+        $sql_update = "UPDATE chromebooks SET Disponivel = 0 WHERE ID = $chromebookID";
         if ($conn->query($sql_update) !== TRUE) {
             echo "Erro ao atualizar disponibilidade do Chromebook: " . $conn->error;
             $conn->rollback(); // Desfaz a transação em caso de erro
