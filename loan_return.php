@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql = "UPDATE Chromebooks SET Disponivel = false WHERE ID = $chromebookID";
         $conn->query($sql);
 
-        $sql = "INSERT INTO Emprestimos (ChromebookID, NomeUsuario, DataEmprestimo, HoraEmprestimo) VALUES ($chromebookID, '$nomeUsuario', '$dataEmprestimo', '$horaEmprestimo')";
+        $sql = "INSERT INTO emprestimos (ChromebookID, NomeUsuario, DataEmprestimo, HoraEmprestimo) VALUES ($chromebookID, '$nomeUsuario', '$dataEmprestimo', '$horaEmprestimo')";
         $conn->query($sql);
 
         echo "Chromebook emprestado com sucesso!";
@@ -21,11 +21,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Devolver Chromebook
         $emprestimoID = $_POST['emprestimoID'];
 
-        $sql = "UPDATE Emprestimos SET DataDevolucao = CURRENT_DATE, HoraDevolucao = CURRENT_TIME WHERE ID = $emprestimoID";
+        $sql = "UPDATE emprestimos SET DataDevolucao = CURRENT_DATE, HoraDevolucao = CURRENT_TIME WHERE ID = $emprestimoID";
         $conn->query($sql);
 
         // Registra na tabela LogMovimentacoes
-        $sql = "INSERT INTO LogMovimentacoes (ChromebookID, DataHoraEmprestimo, DataHoraDevolucao) SELECT ChromebookID, CONCAT(DataEmprestimo, ' ', HoraEmprestimo), NOW() FROM Emprestimos WHERE ID = $emprestimoID";
+        $sql = "INSERT INTO LogMovimentacoes (ChromebookID, DataHoraEmprestimo, DataHoraDevolucao) SELECT ChromebookID, CONCAT(DataEmprestimo, ' ', HoraEmprestimo), NOW() FROM emprestimos WHERE ID = $emprestimoID";
         $conn->query($sql);
 
         echo "Chromebook devolvido com sucesso!";

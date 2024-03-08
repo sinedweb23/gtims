@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['emprestimoID'])) {
     $emprestimoID = $_POST['emprestimoID'];
     
     // Obtém os IDs dos Chromebooks emprestados
-    $sql_chromebooks_ids = "SELECT ChromebookID, DataEmprestimo, HoraEmprestimo, Usuario FROM Emprestimos WHERE ID = $emprestimoID";
+    $sql_chromebooks_ids = "SELECT ChromebookID, DataEmprestimo, HoraEmprestimo, Usuario FROM emprestimos WHERE ID = $emprestimoID";
     $result = $conn->query($sql_chromebooks_ids);
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
@@ -35,8 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['emprestimoID'])) {
                 exit;
             }
             
-            // Remove o registro da tabela Emprestimos
-            $sql_delete = "DELETE FROM Emprestimos WHERE ID = $emprestimoID";
+            // Remove o registro da tabela emprestimos
+            $sql_delete = "DELETE FROM emprestimos WHERE ID = $emprestimoID";
             if ($conn->query($sql_delete) !== TRUE) {
                 echo "Erro ao remover empréstimo: " . $conn->error;
                 $conn->rollback(); // Desfaz a transação em caso de erro
@@ -64,9 +64,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['chromebookIDs'])) {
     // Inicia a transação
     $conn->begin_transaction();
     
-    // Insere os dados do empréstimo na tabela Emprestimos
+    // Insere os dados do empréstimo na tabela emprestimos
     foreach ($chromebookIDs as $chromebookID) {
-        $sql_insert = "INSERT INTO Emprestimos (ChromebookID, DataEmprestimo, HoraEmprestimo, Usuario) 
+        $sql_insert = "INSERT INTO emprestimos (ChromebookID, DataEmprestimo, HoraEmprestimo, Usuario) 
                        VALUES ('$chromebookID', '$dataEmprestimo', '$horaEmprestimo', '$nomeUsuario')";
         if ($conn->query($sql_insert) !== TRUE) {
             echo "Erro ao emprestar os Chromebooks: " . $conn->error;
@@ -190,7 +190,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['chromebookIDs'])) {
         <tbody id="chromebooksLoanBody">
             <?php
             // Seleciona os Chromebooks emprestados
-            $sql = "SELECT chromebooks.Nome AS NomeChromebook, Emprestimos.* FROM chromebooks INNER JOIN emprestimos ON Chromebooks.ID = emprestimos.ChromebookID";
+            $sql = "SELECT chromebooks.Nome AS NomeChromebook, emprestimos.* FROM chromebooks INNER JOIN emprestimos ON Chromebooks.ID = emprestimos.ChromebookID";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
