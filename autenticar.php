@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: index.php");
         exit();
     } else {
-        // Usuário não encontrado, exibir mensagem de erroeegitdd
+        // Usuário não encontrado, exibir mensagem de erroeegitddd
         echo "Email ou senha incorretos.";
     }
 }
