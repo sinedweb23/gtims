@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devolução de Chromebook</title>
+</head>
+<body>
+    <h1>Devolução de Chromebook</h1>
+    <form action="return_chromebook.php" method="post">
+        <label for="chromebookID">Selecionar Chromebook:</label>
+        <select name="chromebookID" id="chromebookID"></select><br>
+        <button type="submit">Devolver</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'select_chromebook.php', true);
+            xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    var data = JSON.parse(xhr.responseText);
+                    var select = document.getElementById('chromebookID');
+                    data.forEach(function(chromebook) {
+                        var option = document.createElement('option');
+                        option.value = chromebook.ID;
+                        option.text = chromebook.Nome;
+                        select.appendChild(option);
+                    });
+                } else {
+                    console.error('Erro ao obter dados: ' + xhr.statusText);
+                }
+            };
+            xhr.onerror = function () {
+                console.error('Erro de rede');
+            };
+            xhr.send();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .banner {
+            width: 100%;
+            position: fixed; /* Banner fixo */
+            top: 0; /* Posicionamento no topo */
+            text-align: center;
+            background-color: #ffffff; /* Cor de fundo do banner */
+            padding: 10px 0; /* Espaçamento interno */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra */
+        }
+
+        .banner img {
+            max-width: 100%; /* Largura máxima da imagem */
+            height: auto; /* Altura automática para manter a proporção */
+        }
