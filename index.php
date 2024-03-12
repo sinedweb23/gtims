@@ -91,7 +91,7 @@ if (!isset($_SESSION['email'])) {
             <li id="menurede"><a href="mapear.php" target="content">Mapear Rede</a></li>
             <li id="menurede"><a href="maparede.php" target="content">Vizualizar Mapa de Rede</a></li>
             <li id="menurede"><a href="emprestimo.php" target="content">Emprestimo de ChromeBook</a></li>
-            <li id="menurede"><a href="cbmovimentacoes.php" target="content">Log de Imprestimos de ChromeBook</a></li>
+            <li id="menurede"><a href="cbmovimentacoes.php" target="content">Log de Emprestimos de Ativos</a></li>
             
         </ul>
     </div>

@@ -132,7 +132,7 @@
     </script>
 
     <!-- Novo Dashboard: chromebooks emprestados por mais de 1 dia sem devolução -->
-    <h2>chromebooks emprestados por mais de 1 dia sem devolução</h2>
+    <h2>Ativos emprestados por mais de 1 dia sem devolução</h2>
     <div style="margin: 20px auto;">
         <canvas id="overduechromebooksChart"></canvas>
     </div>

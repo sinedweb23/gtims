@@ -145,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['chromebookIDs'])) {
 <body>
     <h1>Gerenciamento de chromebooks</h1>
 
-    <h2>Empréstimo de chromebooks</h2>
+    <h2>Empréstimo de Ativos</h2>
     <form action="" method="post">
         <label for="chromebookIDs">Selecionar chromebooks:</label><br>
         <div class="row">
@@ -176,11 +176,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['chromebookIDs'])) {
         <button type="submit">Emprestar</button>
     </form>
 
-    <h2>chromebooks Emprestados</h2>
+    <h2>Ativos Emprestados</h2>
     <table>
         <thead>
             <tr>
-                <th>Chromebook</th>
+                <th>Ativo</th>
                 <th>Data do Empréstimo</th>
                 <th>Hora do Empréstimo</th>
                 <th>Nome do Usuário</th>
