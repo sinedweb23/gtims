@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['emprestimoID'])) {
             // Confirma a transação
             $conn->commit();
             
-            echo "Chromebook devolvido com sucesso!";
+            echo "Ativo devolvido com sucesso!";
             exit; // Encerra o script após a devolução
         }
     } else {
@@ -96,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['chromebookIDs'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciamento de chromebooks</title>
+    <title>Gerenciamento de Ativos</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -143,11 +143,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['chromebookIDs'])) {
     </style>
 </head>
 <body>
-    <h1>Gerenciamento de chromebooks</h1>
+    <h1>Gerenciamento de Ativos</h1>
 
     <h2>Empréstimo de Ativos</h2>
     <form action="" method="post">
-        <label for="chromebookIDs">Selecionar chromebooks:</label><br>
+        <label for="chromebookIDs">Selecionar Ativo:</label><br>
         <div class="row">
             <?php
             // Seleciona os chromebooks disponíveis
