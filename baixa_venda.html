@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dar Baixa em Venda</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h2>Dar Baixa em Venda</h2>
+    <form action="processar_venda.php" method="POST">
+        <label for="produto">Produto:</label>
+        <select id="produto" name="produto">
+            <!-- Aqui você pode popular essa lista com os produtos cadastrados no sistema -->
+            <option value="produto1">Produto 1</option>
+            <option value="produto2">Produto 2</option>
+            <option value="produto3">Produto 3</option>
+        </select><br>
+        
+        <label for="comprador">Nome do Comprador:</label>
+        <input type="text" id="comprador" name="comprador" required><br>
+        
+        <label for="ra">RA:</label>
+        <input type="text" id="ra" name="ra" required><br>
+        
+        <label for="forma_pagamento">Forma de Pagamento:</label>
+        <input type="text" id="forma_pagamento" name="forma_pagamento" required><br>
+        
+        <label for="observacao">Observação:</label>
+        <textarea id="observacao" name="observacao"></textarea><br>
+        
+        <input type="submit" value="Dar Baixa">
+    </form>
+</body>
+</html>
