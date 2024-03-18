@@ -90,9 +90,11 @@ if (!isset($_SESSION['email'])) {
             <li><a href="log.php" target="content">Log de Movimentação</a></li>
             <li id="menurede"><a href="mapear.php" target="content">Mapear Rede</a></li>
             <li id="menurede"><a href="maparede.php" target="content">Vizualizar Mapa de Rede</a></li>
-            <li id="menurede"><a href="emprestimo.php" target="content">Emprestimo de ChromeBook</a></li>
+            <li id="menurede"><a href="emprestimo.php" target="content">Emprestimo de Ativos</a></li>
             <li id="menurede"><a href="cbmovimentacoes.php" target="content">Log de Emprestimos de Ativos</a></li>
-            
+            <li id="menurede"><a href="cadastro_produto.html" target="content">Ativos para Venda</a></li>
+            <li id="menurede"><a href="baixa_venda.php" target="content">Venda de Ativos</a></li>
+            <li id="menurede"><a href="logvendas.php" target="content">Log Vendas</a></li>
         </ul>
     </div>
 
