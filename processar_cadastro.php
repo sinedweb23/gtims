@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt_produto = $conn->prepare($sql_produto);
 
     // Vinculando parâmetros para inserir o produto
-    $stmt_produto->bind_param("sidsi", $nome, $quantidade, $valor, $observacao, $numeroserie);
+    $stmt_produto->bind_param("sidsis", $nome, $quantidade, $valor, $observacao, $numeroserie);
 
     // Executando a declaração para inserir o produto
     if ($stmt_produto->execute()) {
