@@ -71,7 +71,7 @@ $resultado = $conn->query($sql);
             <?php
             // Loop através dos resultados da consulta para exibir os produtos em um menu suspenso
             while ($row = $resultado->fetch_assoc()) {
-                echo "<option value='" . $row['id'] . "'>" . $row['nome'] . " (N. Serie: " . $row['numeroserie'] . ")</option>";
+                echo "<option value='" . $row['id'] . "'>" . $row['nome'] . " (N. Série: " . $row['numeroserie'] . ")</option>";
             }
             ?>
         </select><br>
