@@ -5,12 +5,12 @@ include 'config.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Recuperando os dados do formulário
     $nome = $_POST['nome'];
-    $valor = $_POST['valor'];
+    $valor = $_POST['preco'];
     $quantidade = $_POST['quantidade'];
     $observacao = $_POST['observacao'];
 
     // Preparando a consulta SQL para inserir os dados na tabela de produtos
-    $sql = "INSERT INTO produtos (nome, valor, quantidade, observacao) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO produtos (nome, preco, quantidade, observacao) VALUES (?, ?, ?, ?)";
 
     // Preparando a declaração
     $stmt = $conn->prepare($sql);
