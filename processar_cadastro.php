@@ -10,22 +10,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $numeroserie = $_POST['numeroserie'];
     $observacao = $_POST['observacao'];
 
-    // Preparando a consulta SQL para inserir os dados na tabela de produtos
-    $sql = "INSERT INTO produtos (nome, valor, quantidade, numeroserie, observacao) VALUES (?, ?, ?, ?,?)";
+    // Preparando a consulta SQL para inserir os dados na tabela de log_vendas
+    $sql = "INSERT INTO log_vendas (produto_id, quantidade_vendida, numero_serie, observacao) VALUES ((SELECT id FROM produtos WHERE nome = ?), ?, ?, ?)";
 
     // Preparando a declaração
     $stmt = $conn->prepare($sql);
 
     // Vinculando parâmetros
-    //$stmt->bind_param("sdis", $nome, $valor, $quantidade, $numeroserie, $observacao);
-    $stmt->bind_param("sddss", $nome, $valor, $quantidade, $numeroserie, $observacao);
-
+    $stmt->bind_param("siss", $nome, $quantidade, $numeroserie, $observacao);
 
     // Executando a declaração
     if ($stmt->execute()) {
-        echo "Produto cadastrado com sucesso!";
+        echo "Venda registrada com sucesso!";
     } else {
-        echo "Erro ao cadastrar o produto: " . $conn->error;
+        echo "Erro ao registrar a venda: " . $conn->error;
     }
 
     // Fechando a declaração e a conexão
