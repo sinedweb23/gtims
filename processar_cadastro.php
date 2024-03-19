@@ -11,25 +11,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $observacao = $_POST['observacao'];
 
     // Preparando a consulta SQL para inserir os dados na tabela de produtos
-    $sql_produto = "INSERT INTO produtos (nome, quantidade, valor, observacao, numeroserie) VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO produtos (nome, quantidade, valor, observacao, numeroserie) VALUES (?, ?, ?, ?, ?)";
 
-    // Preparando a declaração para inserir o produto
-    $stmt_produto = $conn->prepare($sql_produto);
+    // Preparando a declaração
+    $stmt = $conn->prepare($sql);
 
-    // Vinculando parâmetros para inserir o produto
-    $stmt_produto->bind_param("sidsis", $nome, $quantidade, $valor, $observacao, $numeroserie);
+    // Vinculando parâmetros
+    $stmt->bind_param("sidss", $nome, $quantidade, $valor, $observacao, $numeroserie);
 
-    // Executando a declaração para inserir o produto
-    if ($stmt_produto->execute()) {
+    // Executando a declaração
+    if ($stmt->execute()) {
         echo "Produto cadastrado com sucesso!";
     } else {
-        echo "Erro ao cadastrar o produto: " . $stmt_produto->error;
+        echo "Erro ao cadastrar o produto: " . $stmt->error;
     }
 
-    // Fechando a declaração para inserir o produto
-    $stmt_produto->close();
-
-    // Fechando a conexão
+    // Fechando a declaração e a conexão
+    $stmt->close();
     $conn->close();
 }
 ?>
