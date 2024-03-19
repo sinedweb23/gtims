@@ -48,10 +48,11 @@
         <?php
         include 'config.php';
 
-        $sql = "SELECT produtos.nome AS produto, log_vendas.quantidade_vendida, log_vendas.numero_serie, log_vendas.comprador, log_vendas.ra, log_vendas.forma_pagamento, log_vendas.observacao, log_vendas.data_venda 
-                FROM log_vendas 
-                INNER JOIN produtos ON log_vendas.produto_id = produtos.id 
-                ORDER BY log_vendas.data_venda DESC";
+        $sql = "SELECT produtos.nome AS produto, log_vendas.quantidade_vendida, log_vendas.numeroserie, log_vendas.comprador, log_vendas.ra, log_vendas.forma_pagamento, log_vendas.observacao, log_vendas.data_venda 
+        FROM log_vendas 
+        INNER JOIN produtos ON log_vendas.produto_id = produtos.id 
+        ORDER BY log_vendas.data_venda DESC";
+
 
         $resultado = $conn->query($sql);
 
