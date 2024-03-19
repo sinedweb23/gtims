@@ -1,3 +1,11 @@
+<?php
+include 'config.php';
+
+// Consulta SQL para recuperar todos os produtos cadastrados
+$sql = "SELECT id, nome, numeroserie FROM produtos";
+$resultado = $conn->query($sql);
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -5,7 +13,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dar Baixa em Venda</title>
     <style>
-        /* Estilos CSS aqui */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -14,20 +69,12 @@
         <label for="produto">Produto:</label>
         <select id="produto" name="produto">
             <?php
-            include 'config.php';
-            // Consulta SQL para recuperar todos os produtos cadastrados
-            $sql = "SELECT id, nome, numeroserie FROM produtos";
-            $resultado = $conn->query($sql);
             // Loop através dos resultados da consulta para exibir os produtos em um menu suspenso
             while ($row = $resultado->fetch_assoc()) {
-                echo "<option value='" . $row['id'] . "' data-numeroserie='" . $row['numeroserie'] . "'>" . $row['nome'] . "</option>";
+                echo "<option value='" . $row['id'] . "' data-numeroserie='" . $row['numeroserie'] . "'>" . $row['nome'] . " (N. Série: " . $row['numeroserie'] . ")</option>";
             }
-            // Liberar resultado
-            $resultado->free();
             ?>
         </select><br>
-        
-        <input type="hidden" id="numeroserie" name="numeroserie">
         
         <label for="quantidade">Quantidade Vendida:</label>
         <input type="number" id="quantidade" name="quantidade" min="1" required><br>
@@ -38,7 +85,7 @@
         <label for="ra">RA:</label>
         <input type="text" id="ra" name="ra" required><br>
         
-        <label for="forma_pagamento">Forma de Pagamento:</label>
+        <label for="forma_pagamento">Valor / Forma de Pagto.:</label>
         <input type="text" id="forma_pagamento" name="forma_pagamento" required><br>
         
         <label for="observacao">Observação:</label>
@@ -46,20 +93,13 @@
         
         <input type="submit" value="Dar Baixa">
     </form>
-    <script>
-        // Função para atualizar o campo hidden com o número de série selecionado
-        function atualizarNumeroSerie() {
-            var select = document.getElementById("produto");
-            var numeroserieInput = document.getElementById("numeroserie");
-            var numeroserieSelecionado = select.options[select.selectedIndex].getAttribute("data-numeroserie");
-            numeroserieInput.value = numeroserieSelecionado;
-        }
-
-        // Chama a função quando o valor do menu suspenso for alterado
-        document.getElementById("produto").addEventListener("change", atualizarNumeroSerie);
-        
-        // Chama a função uma vez para garantir que o campo hidden seja preenchido inicialmente
-        atualizarNumeroSerie();
-    </script>
 </body>
 </html>
+
+<?php
+// Liberar resultado
+$resultado->free();
+
+// Fechar conexão
+$conn->close();
+?>

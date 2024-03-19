@@ -5,9 +5,8 @@ include 'config.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Recuperando os dados do formulário
     $produto_id = $_POST['produto'];
-    $numeroserie = $_POST['numeroserie']; // Recupera o número de série do produto
-    $quantidade_vendida = $_POST['quantidade'];
-    $comprador = isset($_POST['comprador']) ? $_POST['comprador'] : '';
+    $quantidade_vendida = $_POST['quantidade']; // Nova variável para a quantidade vendida
+    $comprador = isset($_POST['comprador']) ? $_POST['comprador'] : ''; // Verifica se o comprador foi enviado
     $ra = $_POST['ra'];
     $forma_pagamento = $_POST['forma_pagamento'];
     $observacao = $_POST['observacao'];
@@ -33,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Verifica se há estoque suficiente
     if ($quantidade >= $quantidade_vendida) {
         // Atualiza o estoque na tabela de produtos
-        $nova_quantidade = $quantidade - $quantidade_vendida;
+        $nova_quantidade = $quantidade - $quantidade_vendida; // Reduz a quantidade em quantidade_vendida
         $sql_update = "UPDATE produtos SET quantidade = ? WHERE id = ?";
         $stmt_update = $conn->prepare($sql_update);
         $stmt_update->bind_param("ii", $nova_quantidade, $produto_id);
@@ -41,9 +40,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt_update->close();
 
         // Insere os detalhes da venda na tabela de log de vendas
-        $sql_insert = "INSERT INTO log_vendas (produto_id, quantidade_vendida, comprador, ra, forma_pagamento, observacao, numeroserie) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $sql_insert = "INSERT INTO log_vendas (produto_id, quantidade_vendida, comprador, ra, forma_pagamento, observacao) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt_insert = $conn->prepare($sql_insert);
-        $stmt_insert->bind_param("iisssss", $produto_id, $quantidade_vendida, $comprador, $ra, $forma_pagamento, $observacao, $numeroserie);
+        $stmt_insert->bind_param("iissss", $produto_id, $quantidade_vendida, $comprador, $ra, $forma_pagamento, $observacao); // Corrigido o tipo de dado para comprador
         $stmt_insert->execute();
         $stmt_insert->close();
 
@@ -60,4 +59,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Fechar conexão
 $conn->close();
-?>
+
