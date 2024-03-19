@@ -2,7 +2,7 @@
 include 'config.php';
 
 // Consulta SQL para recuperar todos os produtos cadastrados
-$sql = "SELECT id, nome, quantidade FROM produtos";
+$sql = "SELECT id, nome, numeroserie FROM produtos";
 $resultado = $conn->query($sql);
 ?>
 
