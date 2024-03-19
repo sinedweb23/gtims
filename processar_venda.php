@@ -35,14 +35,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $nova_quantidade = $quantidade - $quantidade_vendida; // Reduz a quantidade em quantidade_vendida
         $sql_update = "UPDATE produtos SET quantidade = ? WHERE id = ?";
         $stmt_update = $conn->prepare($sql_update);
-        $stmt_update->bind_param("ii", $nova_quantidade, $produto_id);
+        $stmt_update->bind_param("ii", $nova_quantidade, $produto_id,);
         $stmt_update->execute();
         $stmt_update->close();
 
         // Insere os detalhes da venda na tabela de log de vendas
-        $sql_insert = "INSERT INTO log_vendas (produto_id, quantidade_vendida, comprador, ra, forma_pagamento, observacao) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql_insert = "INSERT INTO log_vendas (produto_id, quantidade_vendida, comprador, ra, forma_pagamento, observacao, produto_numeroserie) VALUES (?, ?, ?, ?, ?, ?,?)";
         $stmt_insert = $conn->prepare($sql_insert);
-        $stmt_insert->bind_param("iissss", $produto_id, $quantidade_vendida, $comprador, $ra, $forma_pagamento, $observacao); // Corrigido o tipo de dado para comprador
+        $stmt_insert->bind_param("iissss", $produto_id, $quantidade_vendida, $comprador, $ra, $forma_pagamento, $observacao, $produto_numeroserie); // Corrigido o tipo de dado para comprador
         $stmt_insert->execute();
         $stmt_insert->close();
 
