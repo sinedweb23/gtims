@@ -23,11 +23,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmt->execute()) {
         echo "Venda registrada com sucesso!";
     } else {
-        echo "Erro ao registrar a venda: " . $conn->error;
+        echo "Erro ao registrar a venda: " . $stmt->error;
     }
 
-    // Fechando a declaração e a conexão
+    // Fechando a declaração
     $stmt->close();
-    $conn->close();
 }
+
+// Fechando a conexão
+$conn->close();
 ?>
