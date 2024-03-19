@@ -17,7 +17,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt = $conn->prepare($sql);
 
     // Vinculando parâmetros
-    $stmt->bind_param("sdis", $nome, $valor, $quantidade, $numeroserie, $observacao);
+    //$stmt->bind_param("sdis", $nome, $valor, $quantidade, $numeroserie, $observacao);
+    $stmt->bind_param("sddss", $nome, $valor, $quantidade, $numeroserie, $observacao);
+
 
     // Executando a declaração
     if ($stmt->execute()) {
