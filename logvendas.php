@@ -41,14 +41,15 @@
             <th>Numero de Serie</th>
             <th>Comprador</th>
             <th>RA</th>
-            <th>Valor / Forma pgto.</th>
+            <th>Valor</th>
+            <th>Forma pgto.</th>
             <th>Observação</th>
             <th>Data da Venda</th>
         </tr>
         <?php
         include 'config.php';
 
-        $sql = "SELECT produtos.nome AS produto, log_vendas.quantidade_vendida, log_vendas.numeroserie, log_vendas.comprador, log_vendas.ra, log_vendas.forma_pagamento, log_vendas.observacao, log_vendas.data_venda 
+        $sql = "SELECT produtos.nome AS produto, log_vendas.quantidade_vendida, log_vendas.numeroserie, log_vendas.comprador, log_vendas.ra, log_vendas.valor, log_vendas.forma_pagamento, log_vendas.observacao, log_vendas.data_venda 
         FROM log_vendas 
         INNER JOIN produtos ON log_vendas.produto_id = produtos.id 
         ORDER BY log_vendas.data_venda DESC";
@@ -64,6 +65,7 @@
                 echo "<td>" . $row['numeroserie'] . "</td>";
                 echo "<td>" . $row['comprador'] . "</td>";
                 echo "<td>" . $row['ra'] . "</td>";
+                echo "<td>" . $row['valor'] . "</td>";
                 echo "<td>" . $row['forma_pagamento'] . "</td>";
                 echo "<td>" . $row['observacao'] . "</td>";
                 echo "<td>" . $row['data_venda'] . "</td>";

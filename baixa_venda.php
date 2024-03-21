@@ -85,6 +85,9 @@ $resultado = $conn->query($sql);
         <label for="ra">RA:</label>
         <input type="text" id="ra" name="ra" required><br>
         
+        <label for="valor">Valor:</label>
+        <input type="text" id="valor" name="valor" required><br>
+
         <label for="forma_pagamento">Valor / Forma de Pagto.:</label>
         <input type="text" id="forma_pagamento" name="forma_pagamento" required><br>
         

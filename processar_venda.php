@@ -8,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $quantidade_vendida = $_POST['quantidade']; // Nova variável para a quantidade vendida
     $comprador = isset($_POST['comprador']) ? $_POST['comprador'] : ''; // Verifica se o comprador foi enviado
     $ra = $_POST['ra'];
+    $valor = $_POST['valor'];
     $forma_pagamento = $_POST['forma_pagamento'];
     $observacao = $_POST['observacao'];
 
@@ -40,9 +41,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt_update->close();
 
         // Insere os detalhes da venda na tabela de log de vendas
-        $sql_insert = "INSERT INTO log_vendas (produto_id, quantidade_vendida, comprador, ra, forma_pagamento, observacao, numeroserie) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $sql_insert = "INSERT INTO log_vendas (produto_id, quantidade_vendida, comprador, ra, valor, forma_pagamento, observacao, numeroserie) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt_insert = $conn->prepare($sql_insert);
-        $stmt_insert->bind_param("iisssss", $produto_id, $quantidade_vendida, $comprador, $ra, $forma_pagamento, $observacao, $numeroserie);
+        $stmt_insert->bind_param("iisssdss", $produto_id, $quantidade_vendida, $comprador, $ra, $valor, $forma_pagamento, $observacao, $numeroserie);
         $stmt_insert->execute();
         $stmt_insert->close();
 
