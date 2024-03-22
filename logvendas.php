@@ -10,7 +10,7 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 20px;
-            font-size: 10px;
+            font-size:10px;
         }
         h2 {
             text-align: center;

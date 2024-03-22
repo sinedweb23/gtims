@@ -7,17 +7,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome = $_POST['nome'];
     $valor = $_POST['valor'];
     $quantidade = $_POST['quantidade'];
+    $link = $_POST['link_img'];
     $numeroserie = $_POST['numeroserie'];
     $observacao = $_POST['observacao'];
 
     // Preparando a consulta SQL para inserir os dados na tabela de produtos
-    $sql = "INSERT INTO produtos (nome, quantidade, valor, observacao, numeroserie) VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO produtos (nome, quantidade, link_img, valor, observacao, numeroserie) VALUES (?, ?, ?, ?, ?, ?)";
 
     // Preparando a declaração
     $stmt = $conn->prepare($sql);
 
     // Vinculando parâmetros
-    $stmt->bind_param("sidss", $nome, $quantidade, $valor, $observacao, $numeroserie);
+    $stmt->bind_param("sisdss", $nome, $quantidade, $link, $valor, $observacao, $numeroserie);
 
     // Executando a declaração
     if ($stmt->execute()) {

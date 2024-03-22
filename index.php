@@ -63,7 +63,6 @@ if (!isset($_SESSION['email'])) {
             width: 100%;
             height: 100vh;
         }
-      
 
        
     </style>
@@ -88,13 +87,14 @@ if (!isset($_SESSION['email'])) {
             <li><a href="registrar_saida.php" target="content">Registrar Saída de Produto</a></li>
             <li><a href="estoque.php" target="content">Consultar Estoque</a></li>
             <li><a href="log.php" target="content">Log de Movimentação</a></li>
-            <li id="menurede"><a href="mapear.php" target="content">Mapear Rede</a></li>
-            <li id="menurede"><a href="maparede.php" target="content">Vizualizar Mapa de Rede</a></li>
-            <li id="menurede"><a href="emprestimo.php" target="content">Emprestimo de Ativos</a></li>
-            <li id="menurede"><a href="cbmovimentacoes.php" target="content">Log de Emprestimos de Ativos</a></li>
-            <li id="menurede"><a href="cadastro_produto.html" target="content">Ativos para Venda</a></li>
-            <li id="menurede"><a href="baixa_venda.php" target="content">Venda de Ativos</a></li>
-            <li id="menurede"><a href="logvendas.php" target="content">Log Vendas</a></li>
+            <li><a href="mapear.php" target="content">Mapear Rede</a></li>
+            <li><a href="maparede.php" target="content">Vizualizar Mapa de Rede</a></li>
+            <li><a href="emprestimo.php" target="content">Emprestimo de Ativos</a></li>
+            <li><a href="cbmovimentacoes.php" target="content">Log de Emprestimos de Ativos</a></li>
+            <li><a href="cadastro_produto.html" target="content">Cadastro de Ativos para Venda</a></li>
+            <li><a href="baixa_venda.php" target="content">Venda de Ativos</a></li>
+            <li><a href="vitrine.php" target="content">Vitrine</a></li>
+            <li><a href="logvendas.php" target="content">Log Vendas</a></li>
         </ul>
     </div>
 
