@@ -85,7 +85,7 @@
         <h1>Desapegos de TI Morumbi Sul</h1>
         <p>Explore nossa seleção de equipamentos usados.</p>
         <p>Por favor, note que todos os equipamentos são vendidos sem garantia, mas garantimos que cada item foi cuidadosamente inspecionado para garantir sua funcionalidade e qualidade. Sinta-se à vontade para navegar em nossa vitrine e encontrar o equipamento perfeito para você.<br><br>
-            Formas de pagamento: Cartão, dinheiro, pix e desconto e folha
+            Formas de pagamento: Cartão, dinheiro, pix em desconto e folha.
         </p><BR>
         
         <p style="color: font-size: 16px;">Interessados, ir até a sala do suporte.</p><br>
