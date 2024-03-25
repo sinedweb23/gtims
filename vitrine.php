@@ -84,8 +84,12 @@
         <img src="banner.png" alt="Banner" class="banner">
         <h1>Desapegos de TI Morumbi Sul</h1>
         <p>Explore nossa seleção de equipamentos usados.</p>
-        <p>Por favor, note que todos os equipamentos são vendidos sem garantia, mas garantimos que cada item foi cuidadosamente inspecionado para garantir sua funcionalidade e qualidade. Sinta-se à vontade para navegar em nossa vitrine e encontrar o equipamento perfeito para você.</p><BR>
-        <p>NOVIDADES EM DESTAQUE</p>
+        <p>Por favor, note que todos os equipamentos são vendidos sem garantia, mas garantimos que cada item foi cuidadosamente inspecionado para garantir sua funcionalidade e qualidade. Sinta-se à vontade para navegar em nossa vitrine e encontrar o equipamento perfeito para você.<br><br>
+            Formas de pagamento: Cartão, dinheiro, pix e desconto e folha
+        </p><BR>
+        
+        <p style="color: font-size: 16px;">Interessados, ir até a sala do suporte.</p><br>
+        <p style="color: red; font-size: 16px;">NOVIDADES EM DESTAQUE</p>
         <div class="produtos">
             <?php
                 require_once 'config.php'; // Arquivo de conexão com o banco de dados
