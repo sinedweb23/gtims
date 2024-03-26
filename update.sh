@@ -37,6 +37,6 @@ git commit -a -m "$COMMIT_MESSAGE"
 git push origin main "$VERSION"
 
 # Acessar o servidor Linux e atualizar o código do repositório e ajustar permissões da pasta
-ssh -i  "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull && sudo chown www-data.www-data -R $LINUX_CODE_DIR && sudo git chekout "$VERSION"
+ssh -i  "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull && sudo git checkout "$VERSION" && sudo chown www-data.www-data -R $LINUX_CODE_DIR
 
 
