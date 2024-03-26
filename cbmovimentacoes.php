@@ -84,7 +84,7 @@ $result = $conn->query($sql);
 <body>
     <h1>Registro de Movimentações de chromebooks</h1>
 
-    <!-- Formulário de filtro -->
+    <!-- Formulário de  filtro -->
     <form method="post">
         <div class="form-group">
             <label for="filtro_chromebook">Filtrar por Chromebook:</label>

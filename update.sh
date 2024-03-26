@@ -3,11 +3,13 @@
 # Diretório do código no sistema Windows
 WINDOWS_CODE_DIR="E:/xampp/htdocs/gti"
 
-CHAVE_SSH="E:/xampp/htdocs/gti/ORACLE-GLPI.ppk"
+CHAVE_SSH="E:/xampp/htdocs/gti/ORACLE-GLPI.pem"
 
 
 # Diretório do código no servidor Linux
 LINUX_CODE_DIR="/var/www/morumbisul/glpi/public/gtims"
+
+git describe --tags 
 
 # Solicitar o nome da versão
 read -p "Digite o nome da versão: " VERSION
