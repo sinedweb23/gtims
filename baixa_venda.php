@@ -100,7 +100,7 @@ $resultado = $conn->query($sql);
 </html>
 
 <?php
-// Liberar resultado.
+// Liberar resultado..
 $resultado->free();
 
 // Fechar conexão
