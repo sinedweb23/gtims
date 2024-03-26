@@ -14,6 +14,18 @@ if ($_SESSION['permissao'] !== 1 && $_SESSION['permissao'] !== 2 && $_SESSION['p
     header("Location: acesso_nao_autorizado.php");
     exit();
 }
+
+// Função para obter a versão do Git
+function getGitVersion() {
+    // Executa o comando Git para obter a versão
+    $version = shell_exec('git describe --tags');
+    // Retorna a versão obtida
+    return trim($version);
+}
+
+// Obtém a versão do Git
+$gitVersion = getGitVersion();
+
 ?>
 
 
@@ -105,6 +117,7 @@ if ($_SESSION['permissao'] !== 1 && $_SESSION['permissao'] !== 2 && $_SESSION['p
             <li><a href="vitrine.php" target="content">Vitrine</a></li>
             <li><a href="logvendas.php" target="content">Log Vendas</a></li>
         </ul>
+        <?php echo $gitVersion; ?>
     </div>
 
     

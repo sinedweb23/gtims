@@ -1,6 +1,21 @@
 <?php
 include 'config.php';
 
+session_start();
+
+// Verificar se o usuário está logado
+if (!isset($_SESSION['email'])) {
+    // Se não estiver logado, redirecionar para a página de login
+    header("Location: login.php");
+    exit();
+}
+
+// Verificar a permissão do usuário
+if ($_SESSION['permissao'] !== 2 && $_SESSION['permissao'] !== 2 && $_SESSION['permissao'] !== 3) {
+    // Se a permissão não for 1 (usuário normal), 2 (admin) ou 3 (super-admin), redirecionar para página de acesso não autorizado
+    header("Location: acesso_nao_autorizado.php");
+    exit();
+}
 
 
 
