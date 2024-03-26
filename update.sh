@@ -38,6 +38,6 @@ git push origin main --tags
 
 # Acessar o servidor Linux e atualizar o código do repositório e ajustar permissões da pasta
 #ssh -i  "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull && sudo git checkout "$VERSION" && sudo chown www-data.www-data -R $LINUX_CODE_DIR
-ssh -i "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull && sudo git checkout \"$VERSION\" && sudo chown www-data.www-data -R $LINUX_CODE_DIR"
+ssh -i "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull origin main && sudo git checkout \"$VERSION\" && sudo chown www-data.www-data -R $LINUX_CODE_DIR"
 
 
