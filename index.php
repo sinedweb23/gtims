@@ -7,7 +7,16 @@ if (!isset($_SESSION['email'])) {
     header("Location: login.php");
     exit();
 }
+
+// Verificar a permissão do usuário
+if ($_SESSION['permissao'] !== 1 && $_SESSION['permissao'] !== 2 && $_SESSION['permissao'] !== 3) {
+    // Se a permissão não for 1 (usuário normal), 2 (admin) ou 3 (super-admin), redirecionar para página de acesso não autorizado
+    header("Location: acesso_nao_autorizado.php");
+    exit();
+}
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">

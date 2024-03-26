@@ -1,19 +1,44 @@
 <?php
 include 'config.php';
 
+session_start();
+
+// Verificar se o usuário está logado
+if (!isset($_SESSION['email'])) {
+    // Se não estiver logado, redirecionar para a página de login
+    header("Location: login.php");
+    exit();
+}
+
+// Verificar a permissão do usuário
+if ($_SESSION['permissao'] !== 2 && $_SESSION['permissao'] !== 2 && $_SESSION['permissao'] !== 3) {
+    // Se a permissão não for 1 (usuário normal), 2 (admin) ou 3 (super-admin), redirecionar para página de acesso não autorizado
+    header("Location: acesso_nao_autorizado.php");
+    exit();
+}
+
+
+
+
+
 // Adicionar novo usuário
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_user'])) {
     $nome = $_POST['nome'];
     $email = $_POST['email'];
     $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
+    $permissao = $_POST['permissao']; // Captura o valor da permissão selecionada
 
-    $sql_add_user = "INSERT INTO usuario (Nome, Email, Senha) VALUES ('$nome', '$email', '$senha')";
+    $sql_add_user = "INSERT INTO usuario (Nome, Email, Senha, permissao) VALUES ('$nome', '$email', '$senha', '$permissao')";
     if ($conn->query($sql_add_user) === TRUE) {
         echo "<p>Novo usuário adicionado com sucesso.</p>";
     } else {
         echo "Erro ao adicionar novo usuário: " . $conn->error;
     }
 }
+
+// Consulta SQL para obter as permissões da tabela permissoes
+$sql_permissoes = "SELECT * FROM permissoes";
+$result_permissoes = $conn->query($sql_permissoes);
 
 // Cadastrar nova categoria
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_category'])) {
@@ -120,6 +145,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_switch'])) {
         <input type="email" id="email" name="email" required>
         <label for="senha">Senha:</label>
         <input type="password" id="senha" name="senha" required>
+
+        <!-- Adiciona um campo de seleção para a permissão -->
+        <label for="permissao">Permissão:</label>
+        <select id="permissao" name="permissao" required>
+            <?php
+            // Loop para exibir as opções de permissões
+            while ($row_permissoes = $result_permissoes->fetch_assoc()) {
+                echo "<option value='{$row_permissoes['id']}'>{$row_permissoes['tipo']}</option>";
+            }
+            ?>
+        </select>
+
         <input type="submit" name="add_user" value="Adicionar Usuário">
     </form>
 
