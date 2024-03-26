@@ -34,9 +34,9 @@ git tag "$VERSION"
 git commit -a -m "$COMMIT_MESSAGE"
 
 # Enviar alterações para o repositório remoto
-git push origin main --tags
+git push origin main "$VERSION"
 
 # Acessar o servidor Linux e atualizar o código do repositório e ajustar permissões da pasta
-ssh -i  "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull && sudo chown www-data.www-data -R $LINUX_CODE_DIR "
+ssh -i  "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull && sudo chown www-data.www-data -R $LINUX_CODE_DIR && sudo git chekout "$VERSION"
 
 
