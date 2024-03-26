@@ -40,6 +40,6 @@ git push origin main --tags
 #ssh -i  "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull && sudo git checkout "$VERSION" && sudo chown www-data.www-data -R $LINUX_CODE_DIR
 #ssh -i "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull origin main && sudo chown www-data.www-data -R $LINUX_CODE_DIR"
 #ssh -i "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull origin main && sudo git checkout \"$VERSION\" && sudo git push origin main && sudo chown www-data.www-data -R $LINUX_CODE_DIR"
-ssh -i "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull origin main && sudo git checkout tags/$VERSION && sudo git push origin main && sudo chown www-data.www-data -R $LINUX_CODE_DIR"
+ssh -i "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull origin main && sudo git checkout \"$VERSION\ && sudo git push origin main && sudo chown www-data.www-data -R $LINUX_CODE_DIR"
 
 
