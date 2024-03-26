@@ -40,18 +40,9 @@ git push origin main --tags
 #ssh -i  "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull && sudo git checkout "$VERSION" && sudo chown www-data.www-data -R $LINUX_CODE_DIR
 #ssh -i "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull origin main && sudo chown www-data.www-data -R $LINUX_CODE_DIR"
 #ssh -i "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull origin main && sudo git checkout \"$VERSION\" && sudo git push origin main && sudo chown www-data.www-data -R $LINUX_CODE_DIR"
-#ssh -i "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull origin main && sudo git checkout \"$VERSION\ && sudo git push origin main && sudo chown www-data.www-data -R $LINUX_CODE_DIR"
-#ssh -i "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull origin main && sudo git checkout \"$VERSION\" && sudo git push origin main && sudo chown www-data.www-data -R $LINUX_CODE_DIR"
 #ssh -i "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull origin main && sudo git checkout tags/$VERSION && sudo git push origin main && sudo chown www-data.www-data -R $LINUX_CODE_DIR"
-ssh -i "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "
-    cd $LINUX_CODE_DIR &&
-    sudo git pull origin main &&
-    LATEST_TAG=\$(sudo git describe --tags --abbrev=0) &&
-    sudo git checkout \"\$LATEST_TAG\" &&
-    sudo git remote set-url origin git@github.com:sinedweb23/gtims.git &&
-    sudo git push origin main &&
-    sudo chown www-data.www-data -R $LINUX_CODE_DIR &&
-    echo \"Checkout da última versão (\$LATEST_TAG) e push realizado com sucesso.\"
-"
+#ssh -i "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull origin main && sudo git checkout \"$VERSION\" && sudo git push origin main && sudo chown www-data.www-data -R $LINUX_CODE_DIR"
+ssh -i "$CHAVE_SSH" ubuntu@glpi.morumbisul.com.br "cd $LINUX_CODE_DIR && sudo git pull origin main && sudo git checkout tags/$VERSION && sudo chown www-data.www-data -R $LINUX_CODE_DIR"
+
 
 
