@@ -5,7 +5,7 @@ include 'config.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['emprestimoID'])) {
     $emprestimoID = $_POST['emprestimoID'];
     
-    // Obtém os IDs dos chromebooks emprestadoss
+    // Obtém os IDs dos chromebooks emprestados
     $sql_chromebooks_ids = "SELECT ChromebookID, DataEmprestimo, HoraEmprestimo, Usuario FROM emprestimos WHERE ID = $emprestimoID";
     $result = $conn->query($sql_chromebooks_ids);
     if ($result->num_rows > 0) {
