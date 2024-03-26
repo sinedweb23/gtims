@@ -18,9 +18,9 @@ if ($_SESSION['permissao'] !== 1 && $_SESSION['permissao'] !== 2 && $_SESSION['p
 // Função para obter a versão do Git
 function getGitVersion() {
     // Executa o comando Git para obter a versão
-    $version = shell_exec('git describe --tags');
+    $version = shell_exec("git describe --tags --abbrev=0 | sed 's/v//'");
     // Retorna a versão obtida
-    return trim($version);
+    return "Versão v$version";
 }
 
 // Obtém a versão do Git
