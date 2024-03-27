@@ -2,7 +2,7 @@
 include 'config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Verifica se é um empréstimo ou uma devolução.
+    // Verifica se é um empréstimo ou uma devolução
     if (isset($_POST['chromebookID']) && isset($_POST['nome']) && isset($_POST['data']) && isset($_POST['hora'])) {
         // Emprestar Chromebook
         $chromebookID = $_POST['chromebookID'];

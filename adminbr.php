@@ -106,73 +106,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['reset_password'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página Admin</title>
     <style>
-       body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-}
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px
+            h1 {
+            color: #333;
+        }
 
-h1 {
-    color: #333;
-}
+        form {
+            margin-bottom: 20px;
+        }
 
-form {
-    margin-bottom: 20px;
-}
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
 
-label {
-    display: block;
-    margin-bottom: 5px;
-}
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 250px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-select {
-    width: 250px;
-    padding: 5px;
-    margin-bottom: 10px;
-}
+        input[type="submit"] {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
 
-input[type="submit"],
-button {
-    padding: 8px 15px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-}
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
 
-input[type="submit"]:hover,
-button:hover {
-    background-color: #0056b3;
-}
+        p {
+            color: green;
+        }
 
-p {
-    color: green;
-}
-
-.error {
-    color: red;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-table, th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-
-th {
-    background-color: #f2f2f2;
-}
-
-th, td {
-    text-align: left;
-}
-
+        .error {
+            color: red;
+        }
     </style>
 </head>
 <body>

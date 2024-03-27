@@ -59,7 +59,7 @@
 
         .produto .valor {
             font-size: 2.2em;
-            color: #ff5733; /* Cor destacada.. */
+            color: #ff5733; /* Cor destacada. */
         }
 
         .produto p {

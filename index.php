@@ -27,15 +27,13 @@ function getGitVersion() {
 $gitVersion = getGitVersion();
 
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestão de TI Morumbi Sul..</title>
+    <title>Sistema de Gestão de TI Morumbi Sul</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -52,9 +50,7 @@ $gitVersion = getGitVersion();
         #menu {
             background-color: #141454;
             color: #fff;
-            width: 200px;
             padding: 20px;
-            float: left;
             height: 100vh;
         }
         #menu ul {
@@ -76,54 +72,79 @@ $gitVersion = getGitVersion();
             background-color: #888;
         }
         #content {
-            margin-left: 220px;
             padding: 20px;
         }
         iframe {
             border: none;
             width: 100%;
-            height: 100vh;;
+            height: 100vh;
         }
-
-       
     </style>
 </head>
 <body>
     <div id="header">
-    <a href="inicial.php" target="content">
-    <img src="banner.png" alt="Banner" style="max-width: 10%; height: auto;">
-</a>
-</a>
-
-
+        <a href="inicial.php" target="content">
+            <img src="banner.png" alt="Banner" style="max-width: 10%; height: auto;">
+        </a>
         <p>Bem-vindo, <?php echo $_SESSION['email']; ?>!</p>
-        <a href="logout.php" style="color: #fff;">Logout</a>
-        <a href="admin.php" style="color: #aaa;" target="content">Administrção</a>
+        <a href="logout.php" class="btn btn-primary mr-2">Logout</a>
+        <a href="admin.php" class="btn btn-secondary" target="content">Administração</a>
+        <a href="minha_conta.php" class="btn btn-primary mr-2" target="content">Minha Conta</a>
+
     </div>
 
-    <div id="menu">
-        
-        <ul>
-            <li><a href="registrar_entrada.php" target="content">Registrar Entrada em Produto</a></li>
-            <li><a href="registrar_saida.php" target="content">Registrar Saída de Produto</a></li>
-            <li><a href="estoque.php" target="content">Consultar Estoque</a></li>
-            <li><a href="log.php" target="content">Log de Movimentação</a></li>
-            <li><a href="mapear.php" target="content">Mapear Rede</a></li>
-            <li><a href="maparede.php" target="content">Vizualizar Mapa de Rede</a></li>
-            <li><a href="emprestimo.php" target="content">Emprestimo de Ativos</a></li>
-            <li><a href="cbmovimentacoes.php" target="content">Log de Emprestimos de Ativos</a></li>
-            <li><a href="cadastro_produto.html" target="content">Cadastro de Ativos para Venda</a></li>
-            <li><a href="baixa_venda.php" target="content">Venda de Ativos</a></li>
-            <li><a href="vitrine.php" target="content">Vitrine</a></li>
-            <li><a href="logvendas.php" target="content">Log Vendas</a></li>
-        </ul>
-        <?php echo $gitVersion; ?>
-    </div>
-
-    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="registrar_entrada.php" target="content">Registrar Entrada em Produto</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="registrar_saida.php" target="content">Registrar Saída de Produto</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="estoque.php" target="content">Consultar Estoque</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="log.php" target="content">Log de Movimentação</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="mapear.php" target="content">Mapear Rede</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="maparede.php" target="content">Vizualizar Mapa de Rede</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="emprestimo.php" target="content">Emprestimo de Ativos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="cbmovimentacoes.php" target="content">Log de Emprestimos de Ativos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="cadastro_produto.html" target="content">Cadastro de Ativos para Venda</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="baixa_venda.php" target="content">Venda de Ativos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="vitrine.php" target="content">Vitrine</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logvendas.php" target="content">Log Vendas</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
     <div id="content">
         <iframe src="inicial.php" name="content"></iframe>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
