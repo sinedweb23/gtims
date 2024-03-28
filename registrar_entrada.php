@@ -75,6 +75,10 @@ if (!isset($_SESSION['email'])) {
             <input type="number" name="quantidade" id="quantidade" disabled>
             <br><br>
             
+            Estoque Mínimo: <!-- Adicionado o campo Estoque Mínimo -->
+            <input type="number" name="estoque_minimo" id="estoque_minimo">
+            <br><br>
+            
             Valor:
             <input type="text" name="valor" id="valor" disabled>
             <br><br>
@@ -207,10 +211,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $link_danfe = $_POST['link_danfe'];
         $link_imagem = $_POST['link_imagem'];
         $origem = $_POST['origem'];
+        $estoque_minimo = $_POST['estoque_minimo']; // Novo campo adicionado
 
         // Inserir o novo produto no banco de dados
-        $sql_produto = "INSERT INTO produto (NomeProduto, CategoriaID, NumeroSerie, ValidadeGarantia, LinkDanfe, LinkImagem, Estoque, Valor) 
-                        VALUES ('$novo_produto', $categoria_id, '$numero_serie', '$validade_garantia', '$link_danfe', '$link_imagem', $quantidade, '$valor')";
+        $sql_produto = "INSERT INTO produto (NomeProduto, CategoriaID, NumeroSerie, ValidadeGarantia, LinkDanfe, LinkImagem, Estoque, Valor, estoque_min) 
+                        VALUES ('$novo_produto', $categoria_id, '$numero_serie', '$validade_garantia', '$link_danfe', '$link_imagem', $quantidade, '$valor', $estoque_minimo)";
 
         if ($conn->query($sql_produto) === TRUE) {
             $last_id = $conn->insert_id;
