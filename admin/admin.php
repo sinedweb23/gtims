@@ -22,7 +22,7 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="graficos_centro_custos.php" target="iframe_content">Página Inicial</a>
+                    <a class="nav-link" href="dashboard.php" target="iframe_content">Página Inicial</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="adiciona_switch.php" target="iframe_content">Adicionar Switch</a>
