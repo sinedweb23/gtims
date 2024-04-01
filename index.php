@@ -88,7 +88,7 @@ $gitVersion = getGitVersion();
         </a>
         <p>Bem-vindo, <?php echo $_SESSION['email']; ?>!</p>
         <a href="logout.php" class="btn btn-primary mr-2">Logout</a>
-        <a href="admin.php" class="btn btn-secondary" target="content">Administração</a>
+        <a href="admin/admin.php" class="btn btn-secondary" target="content">Administração</a>
         <a href="minha_conta.php" class="btn btn-primary mr-2" target="content">Minha Conta</a>
 
     </div>
