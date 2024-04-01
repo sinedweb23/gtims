@@ -36,6 +36,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="usuarios.php" target="iframe_content">Lista de Usuários</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="centro_custo.php" target="iframe_content">Centro de Custos</a>
+                </li>
             </ul>
         </div>
     </nav>
