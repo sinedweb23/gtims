@@ -44,7 +44,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <iframe name="iframe_content" src="graficos_centro_custos.php" frameborder="0" width="100%" height="600px"></iframe>
+                <iframe name="iframe_content" src="dashboard.php" frameborder="0" width="100%" height="600px"></iframe>
             </div>
         </div>
     </div>
