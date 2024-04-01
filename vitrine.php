@@ -92,10 +92,11 @@
         <p style="color: red; font-size: 16px;">NOVIDADES EM DESTAQUE</p>
         <div class="produtos">
             <?php
+                
                 require_once 'config.php'; // Arquivo de conexão com o banco de dados
                 
                 // Consulta SQL para buscar os produtos em ordem inversa
-                $sql = "SELECT nome, valor, observacao, link_img FROM produtos ORDER BY id DESC";
+                $sql = "SELECT nome, valor, observacao, link_img FROM produtos WHERE quantidade >= 1 ORDER BY id DESC";
                 $result = $conn->query($sql);
                 
                 // Verifica se há produtos
@@ -113,7 +114,8 @@
                     echo "Nenhum produto encontrado.";
                 }
                 $conn->close();
-            ?>
+                ?>
+                
         </div>
     </div>
 </body>
