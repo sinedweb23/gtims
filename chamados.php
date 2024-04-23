@@ -17,21 +17,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['fechar_chamado'])) {
 
 // Consulta o banco de dados para obter os chamados abertos
 $sql = "SELECT c.id, 
-c.SetorID,  -- Alterado para refletir a coluna SetorID na tabela chamados
-c.id_defeito, 
-c.observacao, 
-c.status, 
-c.data_abertura, 
-c.nome AS solicitante, 
-d.nome AS nome_defeito, 
-d.prioridade, 
-s.Setor AS nome_setor  -- Alterado para refletir a coluna Setor na tabela setor
-FROM chamados c
-INNER JOIN defeitos d ON c.id_defeito = d.id
-INNER JOIN setor s ON c.SetorID = s.SetorID  -- Alterado para refletir a tabela setor e a coluna SetorID
-WHERE c.status = 'Aberto'
-ORDER BY c.data_abertura DESC";
-
+               c.nome AS solicitante, 
+               s.Setor AS nome_setor, 
+               d.nome AS nome_defeito, 
+               d.prioridade, 
+               c.observacao, 
+               c.status, 
+               c.data_abertura
+        FROM chamados c
+        INNER JOIN setor s ON c.SetorID = s.SetorID
+        INNER JOIN defeitos d ON c.id_defeito = d.id
+        WHERE c.status = 'Aberto' -- Verifica se o chamado está aberto
+        ORDER BY c.data_abertura DESC";
 $result = $conn->query($sql);
 
 // Obtém a contagem de chamados abertos atualmente
