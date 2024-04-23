@@ -31,6 +31,7 @@ $sql = "SELECT c.id,
         ORDER BY c.data_abertura DESC";
 
 
+
 $result = $conn->query($sql);
 
 // Obtém a contagem de chamados abertos atualmente
