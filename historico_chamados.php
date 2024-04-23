@@ -3,12 +3,12 @@
 require_once('config.php');
 
 // Consulta o banco de dados para obter os chamados fechados
-$sql = "SELECT c.id, s.nome AS nome_sala, d.nome AS nome_defeito, d.prioridade, c.observacao, c.status, c.data_abertura
+$sql = "SELECT c.id, c.nome AS solicitante, st.Setor AS nome_setor, d.nome AS nome_defeito, d.prioridade, c.observacao, c.status, c.data_abertura
         FROM chamados c
-        INNER JOIN salas s ON c.id_sala = s.id
+        INNER JOIN setor st ON c.id_setor = st.SetorID
         INNER JOIN defeitos d ON c.id_defeito = d.id
-        WHERE c.status = 'Fechado'  -- Verifica se o chamado está fechado
         ORDER BY c.data_abertura DESC";
+
 $result = $conn->query($sql);
 ?>
 
