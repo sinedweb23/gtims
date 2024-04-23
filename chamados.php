@@ -27,8 +27,9 @@ $sql = "SELECT c.id,
         FROM chamados c
         INNER JOIN setor s ON c.SetorID = s.SetorID
         INNER JOIN defeitos d ON c.id_defeito = d.id
-        WHERE c.status = 'Aberto' -- Verifica se o chamado está aberto
+        WHERE c.status = 'Aberto'
         ORDER BY c.data_abertura DESC";
+
 
 $result = $conn->query($sql);
 
