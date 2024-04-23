@@ -16,13 +16,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['fechar_chamado'])) {
 }
 
 // Consulta o banco de dados para obter os chamados abertos
-$sql = "SELECT c.id, c.nome AS solicitante, st.Setor AS nome_setor, d.nome AS nome_defeito, d.prioridade, c.observacao, c.status, c.data_abertura
+$sql = "SELECT c.id, 
+               c.nome AS solicitante, 
+               st.Setor AS nome_setor, 
+               d.nome AS nome_defeito, 
+               d.prioridade, 
+               c.observacao, 
+               c.status, 
+               c.data_abertura
         FROM chamados c
-        INNER JOIN setor st ON c.id_setor = st.SetorID
+        INNER JOIN setor st ON c.SetorID = st.SetorID
         INNER JOIN defeitos d ON c.id_defeito = d.id
-        WHERE c.status = 'Aberto'  -- Verifica se o chamado está aberto
+        WHERE c.status = 'Aberto' -- Verifica se o chamado está aberto
         ORDER BY c.data_abertura DESC";
-
 $result = $conn->query($sql);
 
 // Obtém a contagem de chamados abertos atualmente
@@ -115,51 +121,7 @@ $numChamadosAntes = $result->num_rows;
         </table>
     </div>
 
-    <!-- Script para buscar novos chamados e exibir notificações -->
-    <script>
-        // Função para buscar novos chamados e exibir notificações
-        function verificarNovosChamados() {
-            fetch('get_chamados.php')
-                .then(response => response.json())
-                .then(chamados => {
-                    // Verifica se há novos chamados
-                    if (chamados.length > <?php echo $numChamadosAntes; ?>) {
-                        // Mostra a notificação
-                        mostrarNotificacao();
-                        // Atualiza a página
-                        location.reload();
-                    }
-                })
-                .catch(error => console.error('Erro ao buscar os chamados:', error));
-        }
-
-        // Função para mostrar a notificação
-        function mostrarNotificacao() {
-            // Verifica se o navegador suporta notificações
-            if (!("Notification" in window)) {
-                console.log("Este navegador não suporta notificações.");
-            } else if (Notification.permission === "granted") {
-                // Cria a notificação
-                var notification = new Notification("Novo chamado!", {
-                    body: "Um novo chamado foi aberto.",
-                    icon: "notification_icon.png"
-                });
-            } else if (Notification.permission !== 'denied') {
-                // Solicita permissão ao usuário para mostrar notificações
-                Notification.requestPermission().then(function (permission) {
-                    // Se o usuário permitir, mostra a notificação
-                    if (permission === "granted") {
-                        var notification = new Notification("Novo chamado!", {
-                            body: "Um novo chamado foi aberto.",
-                            icon: "notification_icon.png"
-                        });
-                    }
-                });
-            }
-        }
-
-        // Verifica novos chamados a cada 10 segundos
-        setInterval(verificarNovosChamados, 10000);
-    </script>
+    <!-- Link para o Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
