@@ -21,6 +21,6 @@
 </head>
 <body>
     <h1>Acesso Não Autorizado</h1>
-    <p>Desculpe, você não possui permissão para acessar esta página.</p>
+    <p>Desculpe, você não possui permissão para acessar esta página..</p>
 </body>
 </html>
