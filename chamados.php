@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['fechar_chamado'])) {
     $chamado_id = $_POST['chamado_id'];
     
     // Atualiza o status do chamado para "Fechado" no banco de dados
-    $sql = "UPDATE gestao_ti SET status = 'Fechado' WHERE id = $chamado_id";
+    $sql = "UPDATE chamados SET status = 'Fechado' WHERE id = $chamado_id";
     if ($conn->query($sql) === TRUE) {
         echo "Chamado fechado com sucesso!";
     } else {
@@ -15,19 +15,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['fechar_chamado'])) {
     }
 }
 
-// Consulta o banco de dados para obter os gestao_ti abertos
-$sql = "SELECT c.id, c.nome AS solicitante, st.setor AS nome_setor, d.nome AS nome_defeito, d.prioridade, c.observacao, c.status, c.data_abertura
-        FROM gestao_ti c
-        INNER JOIN setor st ON c.id_setor = st.SetorID
+// Consulta o banco de dados para obter os chamados abertos
+$sql = "SELECT c.id, c.nome AS solicitante, s.nome AS nome_sala, d.nome AS nome_defeito, d.prioridade, c.observacao, c.status, c.data_abertura
+        FROM chamados c
+        INNER JOIN salas s ON c.id_sala = s.id
         INNER JOIN defeitos d ON c.id_defeito = d.id
         WHERE c.status = 'Aberto'  -- Verifica se o chamado está aberto
         ORDER BY c.data_abertura DESC";
-
 $result = $conn->query($sql);
 
-
-// Obtém a contagem de gestao_ti abertos atualmente
-$numgestao_tiAntes = $result->num_rows;
+// Obtém a contagem de chamados abertos atualmente
+$numChamadosAntes = $result->num_rows;
 ?>
 
 <!DOCTYPE html>
@@ -35,7 +33,7 @@ $numgestao_tiAntes = $result->num_rows;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>gestao_ti Abertos</title>
+    <title>Chamados Abertos</title>
     <!-- Link para o Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -57,7 +55,7 @@ $numgestao_tiAntes = $result->num_rows;
 </head>
 <body>
     <div class="container mt-5">
-        <h2 class="mb-4">gestao_ti Abertos</h2>
+        <h2 class="mb-4">Chamados Abertos</h2>
         <table class="table">
             <thead>
                 <tr>
@@ -76,7 +74,7 @@ $numgestao_tiAntes = $result->num_rows;
                 <?php
                 // Verifica se a consulta retornou resultados
                 if ($result->num_rows > 0) {
-                    // Exibe os gestao_ti abertos em uma tabela
+                    // Exibe os chamados abertos em uma tabela
                     while($row = $result->fetch_assoc()) {
                         // Define a classe de estilo com base na prioridade do chamado
                         $prioridade_class = '';
@@ -108,7 +106,7 @@ $numgestao_tiAntes = $result->num_rows;
                         echo "</tr>";
                     }
                 } else {
-                    // Se não houver gestao_ti abertos, exibe uma mensagem
+                    // Se não houver chamados abertos, exibe uma mensagem
                     echo "<tr><td colspan='9'>Nenhum chamado aberto.</td></tr>";
                 }
                 ?>
@@ -116,22 +114,22 @@ $numgestao_tiAntes = $result->num_rows;
         </table>
     </div>
 
-    <!-- Script para buscar novos gestao_ti e exibir notificações -->
+    <!-- Script para buscar novos chamados e exibir notificações -->
     <script>
-        // Função para buscar novos gestao_ti e exibir notificações
-        function verificarNovosgestao_ti() {
-            fetch('get_gestao_ti.php')
+        // Função para buscar novos chamados e exibir notificações
+        function verificarNovosChamados() {
+            fetch('get_chamados.php')
                 .then(response => response.json())
-                .then(gestao_ti => {
-                    // Verifica se há novos gestao_ti
-                    if (gestao_ti.length > <?php echo $numgestao_tiAntes; ?>) {
+                .then(chamados => {
+                    // Verifica se há novos chamados
+                    if (chamados.length > <?php echo $numChamadosAntes; ?>) {
                         // Mostra a notificação
                         mostrarNotificacao();
                         // Atualiza a página
                         location.reload();
                     }
                 })
-                .catch(error => console.error('Erro ao buscar os gestao_ti:', error));
+                .catch(error => console.error('Erro ao buscar os chamados:', error));
         }
 
         // Função para mostrar a notificação
@@ -159,8 +157,8 @@ $numgestao_tiAntes = $result->num_rows;
             }
         }
 
-        // Verifica novos gestao_ti a cada 10 segundos
-        setInterval(verificarNovosgestao_ti, 10000);
+        // Verifica novos chamados a cada 10 segundos
+        setInterval(verificarNovosChamados, 10000);
     </script>
 </body>
 </html>

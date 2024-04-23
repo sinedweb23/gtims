@@ -13,8 +13,8 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="list-group">
-                    <a href="gestao_ti.php" class="list-group-item list-group-item-action">gestao_ti Abertos</a>
-                    <a href="#" class="list-group-item list-group-item-action">gestao_ti Atendidos</a>
+                    <a href="chamados.php" class="list-group-item list-group-item-action">Chamados Abertos</a>
+                    <a href="#" class="list-group-item list-group-item-action">Chamados Atendidos</a>
                     <a href="#" class="list-group-item list-group-item-action">Cadastrar Usuário</a>
                     <a href="#" class="list-group-item list-group-item-action">Cadastrar Defeitos</a>
                     <a href="#" class="list-group-item list-group-item-action">Cadastrar Dúvidas Frequentes</a>
@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="col-md-9">
-                <iframe src="gestao_ti.php" style="width: 100%; height: 500px; border: none;"></iframe>
+                <iframe src="chamados.php" style="width: 100%; height: 500px; border: none;"></iframe>
             </div>
         </div>
         <a href="logout.php" class="btn btn-danger mt-3">Sair</a> <!-- Link para a página de logout -->
