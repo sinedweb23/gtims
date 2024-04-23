@@ -9,12 +9,12 @@ $mensagem = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['abrir_chamado'])) {
     // Obtém os dados do formulário
     $nome_solicitante = $_POST['nome_solicitante']; // Adiciona a variável para o nome do solicitante
-    $id_sala = $_POST['id_sala'];
+    $id_setor = $_POST['id_setor']; // Alterado para 'id_setor' para corresponder à nova tabela
     $id_defeito = $_POST['id_defeito'];
     $observacao = mysqli_real_escape_string($conn, $_POST['observacao']);
 
     // Insere os dados do chamado no banco de dados, incluindo o nome do solicitante
-    $sql = "INSERT INTO gestao_ti (nome, id_sala, id_defeito, observacao) VALUES ('$nome_solicitante', '$id_sala', '$id_defeito', '$observacao')";
+    $sql = "INSERT INTO gestao_ti (nome, id_setor, id_defeito, observacao) VALUES ('$nome_solicitante', '$id_setor', '$id_defeito', '$observacao')";
     if ($conn->query($sql) === TRUE) {
         // Define a mensagem de sucesso
         $mensagem = "Chamado aberto com sucesso!";
@@ -24,9 +24,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['abrir_chamado'])) {
     }
 }
 
-// Consulta o banco de dados para obter as salas
-$sql_salas = "SELECT id, nome FROM salas";
-$result_salas = $conn->query($sql_salas);
+// Consulta o banco de dados para obter os setores
+$sql_setores = "SELECT SetorID, Setor FROM setor"; // Alterado para corresponder à nova tabela
+$result_setores = $conn->query($sql_setores);
 
 // Consulta o banco de dados para obter os defeitos
 $sql_defeitos = "SELECT id, nome FROM defeitos";
@@ -70,17 +70,17 @@ $result_defeitos = $conn->query($sql_defeitos);
                 <input type="text" name="nome_solicitante" id="nome_solicitante" class="form-control" required>
             </div>
             <div class="form-group">
-                <label for="id_sala">Sala:</label>
-                <select name="id_sala" id="id_sala" class="form-control" required>
-                    <option value="">Selecione a sala</option>
+                <label for="id_setor">Setor:</label> <!-- Alterado para corresponder à nova tabela -->
+                <select name="id_setor" id="id_setor" class="form-control" required>
+                    <option value="">Selecione o setor</option>
                     <?php
-                    // Exibe as opções de salas
-                    if ($result_salas->num_rows > 0) {
-                        while($row = $result_salas->fetch_assoc()) {
-                            echo "<option value='".$row["id"]."'>".$row["nome"]."</option>";
+                    // Exibe as opções de setores
+                    if ($result_setores->num_rows > 0) {
+                        while($row = $result_setores->fetch_assoc()) {
+                            echo "<option value='".$row["SetorID"]."'>".$row["Setor"]."</option>"; // Alterado para corresponder à nova tabela
                         }
                     } else {
-                        echo "<option value=''>Nenhuma sala encontrada</option>";
+                        echo "<option value=''>Nenhum setor encontrado</option>";
                     }
                     ?>
                 </select>

@@ -5,7 +5,7 @@ require_once('config.php');
 // Consulta o banco de dados para obter os gestao_ti abertos
 $sql = "SELECT c.id, c.nome AS solicitante, s.nome AS nome_sala, d.nome AS nome_defeito, d.prioridade, c.observacao, c.status, c.data_abertura
         FROM gestao_ti c
-        INNER JOIN salas s ON c.id_sala = s.id
+        INNER JOIN setor st ON c.id_setor = st.SetorID
         INNER JOIN defeitos d ON c.id_defeito = d.id
         WHERE c.status = 'Aberto'  -- Verifica se o chamado está aberto
         ORDER BY c.data_abertura DESC";
