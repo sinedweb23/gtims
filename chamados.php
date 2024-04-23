@@ -29,6 +29,7 @@ $sql = "SELECT c.id,
         INNER JOIN defeitos d ON c.id_defeito = d.id
         WHERE c.status = 'Aberto' -- Verifica se o chamado está aberto
         ORDER BY c.data_abertura DESC";
+
 $result = $conn->query($sql);
 
 // Obtém a contagem de chamados abertos atualmente

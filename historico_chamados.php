@@ -8,6 +8,7 @@ $sql = "SELECT c.id, c.nome AS solicitante, st.Setor AS nome_setor, d.nome AS no
         INNER JOIN setor st ON c.SetorID = st.SetorID
         INNER JOIN defeitos d ON c.id_defeito = d.id
         ORDER BY c.data_abertura DESC";
+
 $result = $conn->query($sql);
 ?>
 
