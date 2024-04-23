@@ -1,6 +1,6 @@
 <?php
-// Simulação de busca de novos chamados (substitua por sua lógica real de busca)
-$novosChamados = array(
+// Simulação de busca de novos gestao_ti (substitua por sua lógica real de busca)
+$novosgestao_ti = array(
     array(
         'id' => 1,
         'solicitante' => 'João',
@@ -23,6 +23,6 @@ $novosChamados = array(
     )
 );
 
-// Retorna os dados dos novos chamados em formato JSON
-echo json_encode($novosChamados);
+// Retorna os dados dos novos gestao_ti em formato JSON
+echo json_encode($novosgestao_ti);
 ?>

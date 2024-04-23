@@ -2,9 +2,9 @@
 // Inclui o arquivo de configuração do banco de dados
 require_once('config.php');
 
-// Consulta o banco de dados para obter os chamados fechados
+// Consulta o banco de dados para obter os gestao_ti fechados
 $sql = "SELECT c.id, s.nome AS nome_sala, d.nome AS nome_defeito, d.prioridade, c.observacao, c.status, c.data_abertura
-        FROM chamados c
+        FROM gestao_ti c
         INNER JOIN salas s ON c.id_sala = s.id
         INNER JOIN defeitos d ON c.id_defeito = d.id
         WHERE c.status = 'Fechado'  -- Verifica se o chamado está fechado
@@ -17,13 +17,13 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Histórico de Chamados</title>
+    <title>Histórico de gestao_ti</title>
     <!-- Link para o Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container mt-5">
-        <h2 class="mb-4">Histórico de Chamados Fechados</h2>
+        <h2 class="mb-4">Histórico de gestao_ti Fechados</h2>
         <table class="table">
             <thead>
                 <tr>
@@ -40,7 +40,7 @@ $result = $conn->query($sql);
                 <?php
                 // Verifica se a consulta retornou resultados
                 if ($result->num_rows > 0) {
-                    // Exibe os chamados fechados em uma tabela
+                    // Exibe os gestao_ti fechados em uma tabela
                     while($row = $result->fetch_assoc()) {
                         echo "<tr>";
                         echo "<td>".$row["id"]."</td>";
@@ -53,7 +53,7 @@ $result = $conn->query($sql);
                         echo "</tr>";
                     }
                 } else {
-                    // Se não houver chamados fechados, exibe uma mensagem
+                    // Se não houver gestao_ti fechados, exibe uma mensagem
                     echo "<tr><td colspan='7'>Nenhum chamado fechado.</td></tr>";
                 }
                 ?>

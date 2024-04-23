@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['abrir_chamado'])) {
     $observacao = mysqli_real_escape_string($conn, $_POST['observacao']);
 
     // Insere os dados do chamado no banco de dados, incluindo o nome do solicitante
-    $sql = "INSERT INTO chamados (nome, id_sala, id_defeito, observacao) VALUES ('$nome_solicitante', '$id_sala', '$id_defeito', '$observacao')";
+    $sql = "INSERT INTO gestao_ti (nome, id_sala, id_defeito, observacao) VALUES ('$nome_solicitante', '$id_sala', '$id_defeito', '$observacao')";
     if ($conn->query($sql) === TRUE) {
         // Define a mensagem de sucesso
         $mensagem = "Chamado aberto com sucesso!";
