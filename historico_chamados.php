@@ -5,7 +5,7 @@ require_once('config.php');
 // Consulta o banco de dados para obter os chamados fechados
 $sql = "SELECT c.id, c.nome AS solicitante, st.Setor AS nome_setor, d.nome AS nome_defeito, d.prioridade, c.observacao, c.status, c.data_abertura
         FROM chamados c
-        INNER JOIN setor st ON c.id_setor = st.SetorID
+        INNER JOIN setor st ON c.SetorID = st.SetorID
         INNER JOIN defeitos d ON c.id_defeito = d.id
         ORDER BY c.data_abertura DESC";
 $result = $conn->query($sql);
@@ -27,7 +27,7 @@ $result = $conn->query($sql);
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Sala</th>
+                    <th>Setor</th>
                     <th>Defeito</th>
                     <th>Prioridade</th>
                     <th>Observação</th>
@@ -43,7 +43,7 @@ $result = $conn->query($sql);
                     while($row = $result->fetch_assoc()) {
                         echo "<tr>";
                         echo "<td>".$row["id"]."</td>";
-                        echo "<td>".$row["nome_sala"]."</td>";
+                        echo "<td>".$row["nome_setor"]."</td>";
                         echo "<td>".$row["nome_defeito"]."</td>";
                         echo "<td>".$row["prioridade"]."</td>";
                         echo "<td>".$row["observacao"]."</td>";
