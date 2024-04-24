@@ -1,6 +1,6 @@
 <?php
 // Include do arquivo de configuração para conexão com o banco de dados
-include 'config1.php';
+include 'admin/config1.php';
 
 // Consulta SQL para contar o número de chamados abertos
 $sql = "SELECT COUNT(*) AS count FROM chamados WHERE status = 'aberto'";
