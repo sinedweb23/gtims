@@ -8,11 +8,18 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
+// Verificar a permissão do usuário
+if ($_SESSION['permissao'] !== 1 && $_SESSION['permissao'] !== 2 && $_SESSION['permissao'] !== 3) {
+    // Se a permissão não for 1 (usuário normal), 2 (admin) ou 3 (super-admin), redirecionar para página de acesso não autorizado
+    header("Location: acesso_nao_autorizado.php");
+    exit();
+}
+
 // Função para obter a versão do Git
 function getGitVersion() {
     // Executa o comando Git para obter a versão.
     $version = shell_exec("git describe --tags --abbrev=0 | sed 's/v//'");
-    // Retorna a versão obtida.
+    // Retorna a versão obtida..
     return "Versão v$version";
 }
 
@@ -20,7 +27,6 @@ function getGitVersion() {
 $gitVersion = getGitVersion();
 
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -41,13 +47,37 @@ $gitVersion = getGitVersion();
             text-align: center;
             padding: 10px 0;
         }
+        #menu {
+            background-color: #141454;
+            color: #fff;
+            padding: 20px;
+            height: 100vh;
+        }
+        #menu ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #menu ul li {
+            margin-bottom: 10px;
+        }
+        #menu ul li a {
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            padding: 5px;
+            border-radius: 5px;
+            background-color: #292a6f;
+        }
+        #menu ul li a:hover {
+            background-color: #888;
+        }
         #content {
             padding: 20px;
         }
         iframe {
             border: none;
             width: 100%;
-            height: calc(100vh - 60px); /* Ajuste de acordo com a altura do header */
+            height: 100vh;
         }
     </style>
 </head>
@@ -59,8 +89,8 @@ $gitVersion = getGitVersion();
         <p>Bem-vindo, <?php echo $_SESSION['email']; ?>!</p>
         <a href="logout.php" class="btn btn-primary mr-2">Logout</a>
         <a href="admin/admin.php" class="btn btn-secondary" target="content">Administração</a>
-        <a href="chamado/chamados.php" class="btn btn-secondary" target="content">Chamados</a>
         <a href="minha_conta.php" class="btn btn-primary mr-2" target="content">Minha Conta</a>
+
     </div>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -69,7 +99,10 @@ $gitVersion = getGitVersion();
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-               
+                <li class="nav-item">
+                    <a class="nav-link" href="chamado/chamados.php" target="content">Chamados</a>
+                </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="chamado/historico_chamados.php" target="content">Historico de Chamados</a>
                 </li>
@@ -118,35 +151,11 @@ $gitVersion = getGitVersion();
         <iframe src="inicial.php" name="content"></iframe>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script>
-        // Função para atualizar a notificação de chamados
-        function updateChamadosNotification() {
-            $.ajax({
-                url: 'get_chamados_count.php', // Arquivo PHP que retorna o número de chamados abertos
-                type: 'GET',
-                success: function(response) {
-                    // Remove qualquer número existente antes de adicionar o novo
-                    $('a[href="chamado/chamados.php"]').find('.badge').remove();
-                    
-                    // Atualiza o número de chamados abertos na notificação
-                    var chamadosCount = parseInt(response);
-                    if (chamadosCount > 0) {
-                        $('a[href="chamado/chamados.php"]').append('<span class="badge badge-pill badge-danger ml-1">' + chamadosCount + '</span>');
-                    }
-                }
-            });
-        }
-
-        // Atualiza a notificação de chamados quando a página é carregada
-        $(document).ready(function() {
-            updateChamadosNotification();
-            // Atualiza a notificação a cada 10 segundos
-            setInterval(updateChamadosNotification, 1000);
-        });
-    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 <footer>
 <?php echo $gitVersion; ?>
 </footer>
-</body>
 </html>
