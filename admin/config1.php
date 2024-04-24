@@ -1,19 +1,18 @@
 <?php
-session_start();
+// Parâmetros de conexão com o banco de dados
+$servername = "localhost";
+$username = "suporte";
+$password = "Msul.2024#"; // Senha em branco
+$database = "chamado";
 
-// Configurações do banco de dados
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'gestao_ti');
+// Tenta realizar a conexão com o banco de dados
+$conn = new mysqli($servername, $username, $password, $database);
 
-// Conexão com o banco de dados
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-// Verifica se há erros na conexão
+// Verifica se houve erro na conexão
 if ($conn->connect_error) {
-    die("Erro de conexão: " . $conn->connect_error);
+    die("Erro na conexão com o banco de dados: " . $conn->connect_error);
 }
 
-
+// Configura o charset para UTF-8 para evitar problemas com caracteres especiais
+$conn->set_charset("utf8");
 ?>

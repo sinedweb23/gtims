@@ -1,6 +1,6 @@
 <?php
 // Inclui o arquivo de configuração do banco de dados
-require_once('../../chamado/config1.php');
+require_once('config1.php');
 
 // Inicializa a variável para armazenar a mensagem
 $mensagem = '';
