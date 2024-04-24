@@ -16,11 +16,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['fechar_chamado'])) {
 }
 
 // Consulta o banco de dados para obter os chamados abertos
-$sql = "SELECT c.id, c.nome AS solicitante, st.Setor AS nome_setor, d.nome AS nome_defeito, d.prioridade, c.observacao, c.status, c.data_abertura
+$sql = "SELECT c.id, c.nome AS solicitante, s.nome AS nome_sala, d.nome AS nome_defeito, d.prioridade, c.observacao, c.status, c.data_abertura
         FROM chamados c
-        INNER JOIN setor st ON c.id_setor = st.SetorID
+        INNER JOIN salas s ON c.id_sala = s.id
         INNER JOIN defeitos d ON c.id_defeito = d.id
-        WHERE c.status = 'Aberto'
+        WHERE c.status = 'Aberto'  -- Verifica se o chamado está aberto
         ORDER BY c.data_abertura DESC";
 $result = $conn->query($sql);
 
@@ -61,7 +61,7 @@ $numChamadosAntes = $result->num_rows;
                 <tr>
                     <th>ID</th>
                     <th>Solicitante</th>
-                    <th>Setor</th>
+                    <th>Sala</th>
                     <th>Defeito</th>
                     <th>Prioridade</th>
                     <th>Observação</th>
@@ -96,7 +96,7 @@ $numChamadosAntes = $result->num_rows;
                         echo "<tr class='".$prioridade_class."'>";
                         echo "<td>".$row["id"]."</td>";
                         echo "<td>".$row["solicitante"]."</td>";
-                        echo "<td>".$row["nome_setor"]."</td>";
+                        echo "<td>".$row["nome_sala"]."</td>";
                         echo "<td>".$row["nome_defeito"]."</td>";
                         echo "<td>".$row["prioridade"]."</td>";
                         echo "<td>".$row["observacao"]."</td>";

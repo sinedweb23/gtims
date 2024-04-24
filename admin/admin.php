@@ -25,7 +25,7 @@
                     <a class="nav-link" href="dashboard.php" target="iframe_content">Página Inicial</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="..defeitos.php" target="iframe_content">Adicionar Defeitos</a>
+                    <a class="nav-link" href="defeitos.php" target="iframe_content">Adicionar Defeitos</a>
                 </li>
 
                 <li class="nav-item">

@@ -100,11 +100,11 @@ $gitVersion = getGitVersion();
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="gestao_ti.php" target="content">gestao_ti</a>
+                    <a class="nav-link" href="chamado/chamados.php" target="content">Chamados</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="historico_gestao_ti.php" target="content">Historico de gestao_ti</a>
+                    <a class="nav-link" href="chamado/historico_chamados.php" target="content">Historico de Chamados</a>
                 </li>
                 
                 <li class="nav-item">
