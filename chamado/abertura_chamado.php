@@ -1,6 +1,6 @@
 <?php
 // Inclui o arquivo de configuração do banco de dados
-require_once('config1.php');
+require_once('config.php');
 
 // Inicializa a variável para armazenar a mensagem
 $mensagem = '';
@@ -70,7 +70,7 @@ $result_defeitos = $conn->query($sql_defeitos);
                 <input type="text" name="nome_solicitante" id="nome_solicitante" class="form-control" required>
             </div>
             <div class="form-group">
-                <label for="id_sala">Sala:</label>
+                <label for="id_sala">Local:</label>
                 <select name="id_sala" id="id_sala" class="form-control" required>
                     <option value="">Selecione a sala</option>
                     <?php
@@ -86,9 +86,9 @@ $result_defeitos = $conn->query($sql_defeitos);
                 </select>
             </div>
             <div class="form-group">
-                <label for="id_defeito">Defeito:</label>
+                <label for="id_defeito">Problema:</label>
                 <select name="id_defeito" id="id_defeito" class="form-control" required>
-                    <option value="">Selecione o defeito</option>
+                    <option value="">Selecione o problema</option>
                     <?php
                     // Exibe as opções de defeitos
                     if ($result_defeitos->num_rows > 0) {
@@ -102,7 +102,7 @@ $result_defeitos = $conn->query($sql_defeitos);
                 </select>
             </div>
             <div class="form-group">
-                <label for="observacao">Observação:</label>
+                <label for="observacao">Digite o defeito:</label>
                 <textarea name="observacao" id="observacao" class="form-control" rows="3"></textarea>
             </div>
             <button type="submit" name="abrir_chamado" class="btn btn-primary">Abrir Chamado</button>

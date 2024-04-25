@@ -1,9 +1,9 @@
 <?php
 // Inclui o arquivo de configuração do banco de dados
-require_once('config1.php');
+require_once('config.php');
 
 // Consulta o banco de dados para obter os chamados fechados
-$sql = "SELECT c.id, s.nome AS nome_sala, d.nome AS nome_defeito, d.prioridade, c.observacao, c.status, c.data_abertura
+$sql = "SELECT c.id, s.nome AS nome_sala, d.nome AS nome_defeito, d.prioridade, c.observacao, c.status, c.data_abertura, c.data_fechamento, c.solucao
         FROM chamados c
         INNER JOIN salas s ON c.id_sala = s.id
         INNER JOIN defeitos d ON c.id_defeito = d.id
@@ -28,12 +28,14 @@ $result = $conn->query($sql);
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Sala</th>
-                    <th>Defeito</th>
+                    <th>Local</th>
+                    <th>Problema</th>
                     <th>Prioridade</th>
                     <th>Observação</th>
                     <th>Status</th>
                     <th>Data de Abertura</th>
+                    <th>Data de Fechamento</th>
+                    <th>Solução</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,6 +52,8 @@ $result = $conn->query($sql);
                         echo "<td>".$row["observacao"]."</td>";
                         echo "<td>".$row["status"]."</td>";
                         echo "<td>".$row["data_abertura"]."</td>";
+                        echo "<td>".$row["data_fechamento"]."</td>";
+                        echo "<td>".$row["solucao"]."</td>";
                         echo "</tr>";
                     }
                 } else {
