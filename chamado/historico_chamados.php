@@ -1,6 +1,6 @@
 <?php
 // Inclui o arquivo de configuração do banco de dados
-require_once('config.php');
+require_once('config1.php');
 
 // Consulta o banco de dados para obter os chamados fechados
 $sql = "SELECT c.id, s.nome AS nome_sala, d.nome AS nome_defeito, d.prioridade, c.observacao, c.status, c.data_abertura, c.data_fechamento, c.solucao
