@@ -3,13 +3,12 @@
 require_once('config.php');
 
 // Consulta o banco de dados para obter os chamados fechados
-$sql = "SELECT c.id, c.nome AS solicitante, st.Setor AS nome_setor, d.nome AS nome_defeito, d.prioridade, c.observacao, c.status, c.data_abertura
+$sql = "SELECT c.id, s.nome AS nome_sala, d.nome AS nome_defeito, d.prioridade, c.observacao, c.status, c.data_abertura, c.data_fechamento, c.solucao
         FROM chamados c
-        INNER JOIN setor st ON c.id_setor = st.SetorID
+        INNER JOIN salas s ON c.id_sala = s.id
         INNER JOIN defeitos d ON c.id_defeito = d.id
+        WHERE c.status = 'Fechado'  -- Verifica se o chamado está fechado
         ORDER BY c.data_abertura DESC";
-
-
 $result = $conn->query($sql);
 ?>
 
@@ -29,12 +28,14 @@ $result = $conn->query($sql);
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Setor</th>
-                    <th>Defeito</th>
+                    <th>Local</th>
+                    <th>Problema</th>
                     <th>Prioridade</th>
                     <th>Observação</th>
                     <th>Status</th>
                     <th>Data de Abertura</th>
+                    <th>Data de Fechamento</th>
+                    <th>Solução</th>
                 </tr>
             </thead>
             <tbody>
@@ -45,12 +46,14 @@ $result = $conn->query($sql);
                     while($row = $result->fetch_assoc()) {
                         echo "<tr>";
                         echo "<td>".$row["id"]."</td>";
-                        echo "<td>".$row["nome_setor"]."</td>";
+                        echo "<td>".$row["nome_sala"]."</td>";
                         echo "<td>".$row["nome_defeito"]."</td>";
                         echo "<td>".$row["prioridade"]."</td>";
                         echo "<td>".$row["observacao"]."</td>";
                         echo "<td>".$row["status"]."</td>";
                         echo "<td>".$row["data_abertura"]."</td>";
+                        echo "<td>".$row["data_fechamento"]."</td>";
+                        echo "<td>".$row["solucao"]."</td>";
                         echo "</tr>";
                     }
                 } else {
