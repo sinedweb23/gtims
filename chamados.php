@@ -2,7 +2,7 @@
 // Inclui o arquivo de configuração do banco de dados
 require_once('config.php');
 
-// Definindo $result como vazio inicialmente
+// Definindo $result como vazio inicialmente.
 $result = null;
 
 // Verifica se os dados do formulário foram enviados
