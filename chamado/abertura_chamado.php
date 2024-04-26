@@ -24,9 +24,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['abrir_chamado'])) {
     }
 }
 
-// Consulta o banco de dados para obter as salas
-$sql_salas = "SELECT id, nome FROM salas";
-$result_salas = $conn->query($sql_salas);
+// Consulta o banco de dados para obter os andares
+$sql_andares = "SELECT id, nome FROM andares";
+$result_andares = $conn->query($sql_andares);
 
 // Consulta o banco de dados para obter os defeitos
 $sql_defeitos = "SELECT id, nome FROM defeitos";
@@ -69,20 +69,28 @@ $result_defeitos = $conn->query($sql_defeitos);
                 <label for="nome_solicitante">Nome do Solicitante:</label>
                 <input type="text" name="nome_solicitante" id="nome_solicitante" class="form-control" required>
             </div>
+            <!-- Adicione o select do andar -->
             <div class="form-group">
-                <label for="id_sala">Local:</label>
-                <select name="id_sala" id="id_sala" class="form-control" required>
-                    <option value="">Selecione a sala</option>
+                <label for="id_andar">Andar:</label>
+                <select name="id_andar" id="id_andar" class="form-control" required>
+                    <option value="">Selecione o andar</option>
                     <?php
-                    // Exibe as opções de salas
-                    if ($result_salas->num_rows > 0) {
-                        while($row = $result_salas->fetch_assoc()) {
+                    // Exibe as opções de andares
+                    if ($result_andares->num_rows > 0) {
+                        while($row = $result_andares->fetch_assoc()) {
                             echo "<option value='".$row["id"]."'>".$row["nome"]."</option>";
                         }
                     } else {
-                        echo "<option value=''>Nenhuma sala encontrada</option>";
+                        echo "<option value=''>Nenhum andar encontrado</option>";
                     }
                     ?>
+                </select>
+            </div>
+            <!-- Adicione o select de sala -->
+            <div class="form-group">
+                <label for="id_sala">Local:</label>
+                <select name="id_sala" id="id_sala" class="form-control" required>
+                    <option value="">Selecione o andar primeiro</option>
                 </select>
             </div>
             <div class="form-group">
@@ -108,5 +116,35 @@ $result_defeitos = $conn->query($sql_defeitos);
             <button type="submit" name="abrir_chamado" class="btn btn-primary">Abrir Chamado</button>
         </form>
     </div>
+
+    <!-- Adicione o script JavaScript para carregar as salas -->
+    <script>
+        document.getElementById('id_andar').addEventListener('change', function() {
+            var andarId = this.value;
+            var andarNome = this.options[this.selectedIndex].text; // Obter o nome do andar selecionado
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // Limpa as opções atuais
+                        var selectSala = document.getElementById('id_sala');
+                        selectSala.innerHTML = '<option value="">Selecione a sala</option>';
+                        // Adiciona as novas opções
+                        var salas = JSON.parse(xhr.responseText);
+                        salas.forEach(function(sala) {
+                            var option = document.createElement('option');
+                            option.value = sala.id;
+                            option.textContent = sala.nome;
+                            selectSala.appendChild(option);
+                        });
+                    } else {
+                        console.error('Ocorreu um erro ao carregar as salas.');
+                    }
+                }
+            };
+            xhr.open('GET', 'get_salas.php?id_andar=' + andarId + '&andar_nome=' + encodeURIComponent(andarNome), true);
+            xhr.send();
+        });
+    </script>
 </body>
 </html>
