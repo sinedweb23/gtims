@@ -1,6 +1,6 @@
 <?php
 // Inclui o arquivo de configuração do banco de dados
-require_once('config.php');
+require_once('config1.php');
 
 session_start();
 
