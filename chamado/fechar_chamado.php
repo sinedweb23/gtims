@@ -1,6 +1,7 @@
 <?php
 // Inclui o arquivo de configuração do banco de dados
 require_once('config1.php');
+session_start();
 
 // Verifica se os dados do formulário foram enviados
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['chamado_id']) && isset($_POST['solucao'])) {
