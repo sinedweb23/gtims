@@ -152,6 +152,5 @@ $result_defeitos = $conn->query($sql_defeitos);
             xhr.send();
         });
     </script>
-    
 </body>
 </html>
