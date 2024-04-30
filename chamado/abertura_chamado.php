@@ -119,6 +119,7 @@ $result_defeitos = $conn->query($sql_defeitos);
                 <textarea name="observacao" id="observacao" class="form-control" rows="3"></textarea>
             </div>
             <button type="submit" name="abrir_chamado" class="btn btn-primary">Abrir Chamado</button>
+            By Denis Augusto
         </form>
     </div>
 
