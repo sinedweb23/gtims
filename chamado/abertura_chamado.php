@@ -152,8 +152,6 @@ $result_defeitos = $conn->query($sql_defeitos);
             xhr.send();
         });
     </script>
-    <footer class ="foot">
-        By Denis Augusto
-    </footer>
+    
 </body>
 </html>
