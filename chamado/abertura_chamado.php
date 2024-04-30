@@ -51,6 +51,11 @@ $result_defeitos = $conn->query($sql_defeitos);
             max-width: 100%; /* Para tornar o logo responsivo */
             height: auto; /* Para manter a proporção */
         }
+
+        footer{
+            font-size: 28px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -146,5 +151,8 @@ $result_defeitos = $conn->query($sql_defeitos);
             xhr.send();
         });
     </script>
+    <footer class ="foot">
+        By Denis Augusto
+    </footer>
 </body>
 </html>
