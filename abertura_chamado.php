@@ -1,6 +1,6 @@
 <?php
 // Inclui o arquivo de configuração do banco de dados
-require_once('config.php');
+require_once('config1.php');
 
 // Inicializa a variável para armazenar a mensagem
 $mensagem = '';
@@ -50,6 +50,11 @@ $result_defeitos = $conn->query($sql_defeitos);
             margin-bottom: 20px;
             max-width: 100%; /* Para tornar o logo responsivo */
             height: auto; /* Para manter a proporção */
+        }
+
+        footer{
+            font-size: 28px;
+            text-align: center;
         }
     </style>
 </head>
@@ -114,6 +119,7 @@ $result_defeitos = $conn->query($sql_defeitos);
                 <textarea name="observacao" id="observacao" class="form-control" rows="3"></textarea>
             </div>
             <button type="submit" name="abrir_chamado" class="btn btn-primary">Abrir Chamado</button>
+            By Denis Augusto
         </form>
     </div>
 
@@ -146,5 +152,8 @@ $result_defeitos = $conn->query($sql_defeitos);
             xhr.send();
         });
     </script>
+    <footer class ="foot">
+        By Denis Augusto
+    </footer>
 </body>
 </html>
