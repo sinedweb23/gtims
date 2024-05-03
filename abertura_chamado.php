@@ -18,6 +18,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['abrir_chamado'])) {
     if ($conn->query($sql) === TRUE) {
         // Define a mensagem de sucesso
         $mensagem = "Chamado aberto com sucesso!";
+        // Redireciona o usuário após o envio do formulário
+        header("Location: {$_SERVER['REQUEST_URI']}");
+        exit();
     } else {
         // Se houver um erro, exibe uma mensagem de erro
         $mensagem = "Erro ao abrir o chamado: " . $conn->error;
