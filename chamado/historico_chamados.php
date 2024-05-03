@@ -108,7 +108,7 @@ $result = $conn->query($sqlFinal);
         <table class="table mt-4">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    
                     <th>Local</th>
                     <th>Problema</th>
                     <th>Prioridade</th>
