@@ -96,7 +96,9 @@ $gitVersion = getGitVersion();
 <body>
     <div class="sidebar">
         <div class="text-center mb-4">
-            <img src="banner.png" alt="Logo" class="img-fluid">
+        <a href="inicial.php" target="iframe">
+    <img src="banner.png" alt="Logo" class="img-fluid">
+</a>
         </div>
         <ul>
             <li><a href="chamado/chamados.php" target="iframe"><i class="fas fa-home"></i> Chamados <span id="chamadosNotification" class="badge badge-pill badge-danger ml-1"></span></a></li>
@@ -172,7 +174,7 @@ $gitVersion = getGitVersion();
         $(document).ready(function() {
             updateChamadosNotification();
             // Atualiza a notificação a cada 10 segundos
-            setInterval(updateChamadosNotification, 10000);
+            setInterval(updateChamadosNotification, 1000);
         });
     </script>
 </body>
