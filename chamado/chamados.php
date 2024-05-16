@@ -18,7 +18,7 @@ $sql_fechados = "SELECT c.id, c.nome AS solicitante, s.nome AS nome_sala, d.nome
                 INNER JOIN salas s ON c.id_sala = s.id
                 INNER JOIN defeitos d ON c.id_defeito = d.id
                 WHERE c.status = 'Fechado' AND DATE(c.data_fechamento) = CURDATE()
-                ORDER BY c.data_fechamento DESC";
+                ORDER BY c.data_abertura DESC";
 
 // Executa as consultas
 $result_chamados = $conn->query($sql_chamados);
