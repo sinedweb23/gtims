@@ -1,17 +1,21 @@
 <?php
-// Include do arquivo de configuração para conexão com o banco de dados
-include 'admin/config1.php';
+// Inclui o arquivo de configuração do banco de dados
+require_once('config1.php');
 
-// Consulta SQL para contar o número de chamados abertos
-$sql = "SELECT COUNT(*) AS count FROM chamados WHERE status = 'aberto'";
+header('Content-Type: application/json');
+
+// Consulta SQL para contar chamados abertos
+$sql = "SELECT COUNT(*) AS count FROM chamados WHERE status = 'Aberto'";
+
 $result = $conn->query($sql);
 
-// Verifica se a consulta foi bem-sucedida e se há pelo menos um resultado
-if ($result && $result->num_rows > 0) {
-    // Obtém o número de chamados abertos e retorna como resposta
+// Obtém o resultado
+$count = 0;
+if ($result) {
     $row = $result->fetch_assoc();
-    echo $row['count'];
-} else {
-    echo '0'; // Retorna 0 se não houver chamados abertos
+    $count = $row['count'];
 }
+
+// Retorna o número de chamados abertos em formato JSON
+echo json_encode($count);
 ?>
