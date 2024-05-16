@@ -59,7 +59,7 @@ $result = $conn->query($sqlFinal);
 </head>
 <body>
     <div class="container mt-5">
-        <h2 class="mb-4">Histórico de Chamados Fechados</h2>
+        <h5 class="mb-4">Histórico de Chamados Fechados</h5>
 
         <!-- Formulário de Filtros -->
         <form method="GET">
@@ -126,7 +126,7 @@ $result = $conn->query($sqlFinal);
                     // Exibe os chamados fechados em uma tabela
                     while($row = $result->fetch_assoc()) {
                         echo "<tr>";
-                        echo "<td>".$row["id"]."</td>";
+                       
                         echo "<td>".$row["nome_sala"]."</td>";
                         echo "<td>".$row["nome_defeito"]."</td>";
                         echo "<td>".$row["prioridade"]."</td>";

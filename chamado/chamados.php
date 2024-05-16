@@ -5,15 +5,24 @@ require_once('config1.php');
 session_start();
 
 // Consulta o banco de dados para obter os chamados abertos
-$sql = "SELECT c.id, c.nome AS solicitante, s.nome AS nome_sala, d.nome AS nome_defeito, d.prioridade, c.observacao, c.status, c.data_abertura, c.data_fechamento
-        FROM chamados c
-        INNER JOIN salas s ON c.id_sala = s.id
-        INNER JOIN defeitos d ON c.id_defeito = d.id
-        WHERE c.status = 'Aberto'  -- Verifica se o chamado está aberto
-        ORDER BY c.data_abertura DESC";
+$sql_abertos = "SELECT c.id, c.nome AS solicitante, s.nome AS nome_sala, d.nome AS nome_defeito, d.prioridade, c.observacao, c.status, c.data_abertura, c.data_fechamento
+                FROM chamados c
+                INNER JOIN salas s ON c.id_sala = s.id
+                INNER JOIN defeitos d ON c.id_defeito = d.id
+                WHERE c.status = 'Aberto'
+                ORDER BY c.data_abertura DESC";
 
-// Executa a consulta
-$result = $conn->query($sql);
+// Consulta o banco de dados para obter os chamados em atendimento
+$sql_atendendo = "SELECT c.id, c.nome AS solicitante, s.nome AS nome_sala, d.nome AS nome_defeito, d.prioridade, c.observacao, c.status, c.data_abertura, c.data_fechamento
+                  FROM chamados c
+                  INNER JOIN salas s ON c.id_sala = s.id
+                  INNER JOIN defeitos d ON c.id_defeito = d.id
+                  WHERE c.status = 'Atendendo'
+                  ORDER BY c.data_abertura DESC";
+
+// Executa as consultas
+$result_abertos = $conn->query($sql_abertos);
+$result_atendendo = $conn->query($sql_atendendo);
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +30,7 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chamados Abertos</title>
+    <title>Chamados</title>
     <!-- Link para o Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -43,7 +52,7 @@ $result = $conn->query($sql);
 </head>
 <body>
     <div class="container mt-5">
-        <h2 class="mb-4">Chamados Abertos</h2>
+        <h5 class="mb-4">Chamados Abertos</h5>
         <table class="table">
             <thead>
                 <tr>
@@ -61,9 +70,9 @@ $result = $conn->query($sql);
             <tbody>
                 <?php
                 // Verifica se a consulta retornou resultados
-                if ($result && $result->num_rows > 0) {
+                if ($result_abertos && $result_abertos->num_rows > 0) {
                     // Exibe os chamados abertos em uma tabela
-                    while($row = $result->fetch_assoc()) {
+                    while($row = $result_abertos->fetch_assoc()) {
                         // Define a classe de estilo com base na prioridade do chamado
                         $prioridade_class = '';
                         switch ($row["prioridade"]) {
@@ -90,7 +99,9 @@ $result = $conn->query($sql);
                         echo "<td>".$row["observacao"]."</td>";
                         echo "<td>".$row["status"]."</td>";
                         echo "<td>".$row["data_abertura"]."</td>";
-                        echo "<td><button onclick='fecharChamado(".$row["id"].")' class='btn btn-primary'>Fechar Chamado</button></td>";
+                        echo "<td>
+                                <button onclick='atenderChamado(".$row["id"].")' class='btn btn-warning'>Atender</button>
+                              </td>";
                         echo "</tr>";
                     }
                 } else {
@@ -100,9 +111,69 @@ $result = $conn->query($sql);
                 ?>
             </tbody>
         </table>
+
+        <h5 class="mb-4">Chamados em Atendimento</h5>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Solicitante</th>
+                    <th>Sala</th>
+                    <th>Problema</th>
+                    <th>Prioridade</th>
+                    <th>Observação</th>
+                    <th>Status</th>
+                    <th>Data de Abertura</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                // Verifica se a consulta retornou resultados
+                if ($result_atendendo && $result_atendendo->num_rows > 0) {
+                    // Exibe os chamados em atendimento em uma tabela
+                    while($row = $result_atendendo->fetch_assoc()) {
+                        // Define a classe de estilo com base na prioridade do chamado
+                        $prioridade_class = '';
+                        switch ($row["prioridade"]) {
+                            case 'alto':
+                                $prioridade_class = 'prioridade-alta';
+                                break;
+                            case 'medio':
+                                $prioridade_class = 'prioridade-media';
+                                break;
+                            case 'baixo':
+                                $prioridade_class = 'prioridade-baixa';
+                                break;
+                            default:
+                                $prioridade_class = '';
+                        }
+                        
+                        // Exibe o chamado na tabela com a classe de estilo condicional
+                        echo "<tr class='".$prioridade_class."'>";
+                        echo "<td>".$row["id"]."</td>";
+                        echo "<td>".$row["solicitante"]."</td>";
+                        echo "<td>".$row["nome_sala"]."</td>";
+                        echo "<td>".$row["nome_defeito"]."</td>";
+                        echo "<td>".$row["prioridade"]."</td>";
+                        echo "<td>".$row["observacao"]."</td>";
+                        echo "<td>".$row["status"]."</td>";
+                        echo "<td>".$row["data_abertura"]."</td>";
+                        echo "<td>
+                                <button onclick='fecharChamado(".$row["id"].")' class='btn btn-primary'>Fechar Chamado</button>
+                              </td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    // Se não houver chamados em atendimento, exibe uma mensagem
+                    echo "<tr><td colspan='9'>Nenhum chamado em atendimento.</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
     </div>
 
-    <!-- Script para fechar chamado -->
+    <!-- Script para fechar e atender chamado -->
     <script>
         function fecharChamado(id) {
             var solucao = prompt("Digite a solução adotada para fechar o chamado:");
@@ -129,6 +200,29 @@ $result = $conn->query($sql);
                 })
                 .catch(error => console.error('Erro ao fechar o chamado:', error));
             }
+        }
+
+        function atenderChamado(id) {
+            // Atualiza o status do chamado para "Atendendo"
+            fetch('atender_chamado.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    chamado_id: id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Chamado marcado como atendendo!");
+                    location.reload();
+                } else {
+                    alert("Erro ao atender o chamado: " + data.error);
+                }
+            })
+            .catch(error => console.error('Erro ao atender o chamado:', error));
         }
     </script>
 </body>
