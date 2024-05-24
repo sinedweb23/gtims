@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Reserva de Ativos</title>
+    <title>Reserva de Chromebook</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -170,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="text-center">
             <img src="logo.png" alt="Logo" class="img-fluid my-3">
         </div>
-        <h1 class="text-center mt-3">Reserva de Ativos</h1>
+        <h1 class="text-center mt-3">Reserva de Chromebook</h1>
         <form id="reservaForm" method="POST" action="reserva.php" class="mt-4">
             <div class="form-group">
                 <label for="data_reserva">Data da Reserva</label>
@@ -216,7 +216,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </select>
             </div>
             <div class="form-group">
-                <label>Ativos Disponíveis: <span id="ativos_disponiveis"></span></label>
+                <label>Chromebook Disponíveis: <span id="ativos_disponiveis"></span></label>
                 <input type="number" name="ativos_quantidade" class="form-control" required min="1" id="ativos_quantidade">
             </div>
             <button type="submit" class="btn btn-primary">Reservar</button>

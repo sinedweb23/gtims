@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
-$username = "root";
-$password = "";
+$username = "suporte";
+$password = "Msul.2024#";
 $dbname_gestao = "gestao_ti";
 $dbname_chamado = "chamado"; // Nome do banco de dados onde as tabelas salas e andares estão
 
@@ -17,3 +17,5 @@ try {
     echo "Connection failed: " . $e->getMessage();
 }
 ?>
+
+
