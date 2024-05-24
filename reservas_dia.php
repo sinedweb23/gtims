@@ -1,5 +1,54 @@
+<?php
+include 'db_connect.php';
+
+$date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
+
+function fetch_reservas($date, $conn_gestao, $conn_chamado) {
+    $sql = "SELECT reservas.*, chromebooks.Nome AS ativo_nome, a.nome AS andar_nome, s.nome AS sala_nome 
+            FROM reservas
+            JOIN chromebooks ON reservas.ativo_id = chromebooks.ID
+            JOIN chamado.salas AS s ON reservas.sala_id = s.id
+            JOIN chamado.andares AS a ON s.id_andar = a.id
+            WHERE reservas.data_reserva = :date
+            ORDER BY email_professor, hora_retirada";
+    $stmt = $conn_gestao->prepare($sql);
+    $stmt->execute(['date' => $date]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$reservas = fetch_reservas($date, $conn_gestao, $conn_chamado);
+
+// Agrupar reservas por professor e data
+$reservasAgrupadas = [];
+if ($reservas) {
+    foreach ($reservas as $reserva) {
+        $key = $reserva['email_professor'] . '_' . $reserva['data_reserva'];
+        if (!isset($reservasAgrupadas[$key])) {
+            $reservasAgrupadas[$key] = [
+                'email_professor' => $reserva['email_professor'],
+                'data_reserva' => $reserva['data_reserva'],
+                'andar_nome' => $reserva['andar_nome'],
+                'sala_nome' => $reserva['sala_nome'],
+                'hora_retirada' => $reserva['hora_retirada'],
+                'hora_devolucao' => $reserva['hora_devolucao'],
+                'ativos' => [],
+                'ids' => [],
+                'status' => isset($reserva['status']) ? $reserva['status'] : 'pendente' // Adiciona um valor padrão para status
+            ];
+        }
+        $reservasAgrupadas[$key]['ativos'][] = $reserva['ativo_nome'];
+        $reservasAgrupadas[$key]['ids'][] = $reserva['id'];
+    }
+}
+
+if (isset($_GET['ajax'])) {
+    echo json_encode($reservasAgrupadas);
+    exit;
+}
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -169,25 +218,29 @@
             </div>
         </form>
         <div class="row" id="reservas-container">
-            <?php foreach ($reservasAgrupadas as $key => $reserva): ?>
-            <div class="col-md-4" id="card-<?= htmlspecialchars(implode('-', $reserva['ids'])) ?>" data-ativos="<?= htmlspecialchars(implode(',', $reserva['ativos'])) ?>" data-email="<?= htmlspecialchars($reserva['email_professor']) ?>" data-andar="<?= htmlspecialchars($reserva['andar_nome']) ?>" data-sala="<?= htmlspecialchars($reserva['sala_nome']) ?>" data-reserva="<?= htmlspecialchars($reserva['data_reserva']) ?>" data-hora_retirada="<?= htmlspecialchars($reserva['hora_retirada']) ?>" data-hora_devolucao="<?= htmlspecialchars($reserva['hora_devolucao']) ?>">
-                <div class="card mb-4 <?= $reserva['status'] === 'devolvido' ? 'card-devolvido' : ($reserva['status'] === 'retirado' ? 'card-retirado' : 'card-custom') ?>">
-                    <div class="card-body">
-                        <h5 class="card-title">Professor: <?= htmlspecialchars($reserva['email_professor']) ?></h5>
-                        <p class="card-text">
-                            Andar: <?= htmlspecialchars($reserva['andar_nome']) ?><br>
-                            Sala: <?= htmlspecialchars($reserva['sala_nome']) ?><br>
-                            Data: <?= htmlspecialchars($reserva['data_reserva']) ?><br>
-                            Retirada: <?= htmlspecialchars($reserva['hora_retirada']) ?><br>
-                            Devolução: <?= htmlspecialchars($reserva['hora_devolucao']) ?><br>
-                            Ativos: <?= htmlspecialchars(implode(', ', $reserva['ativos'])) ?><br>
-                        </p>
-                        <button class="btn btn-danger" onclick="cancelarReserva(<?= htmlspecialchars(json_encode($reserva['ids'])) ?>)">Cancelar Reserva</button>
-                        <?= $reserva['status'] === 'retirado' ? '<button class="btn btn-primary" onclick="devolverTotal(' . htmlspecialchars(json_encode($reserva['ids'])) . ')">Devolução Total</button>' : '<button class="btn btn-success" onclick="marcarRetirado(' . htmlspecialchars(json_encode($reserva['ids'])) . ')">Retirar</button>' ?>
+            <?php if (!empty($reservasAgrupadas)): ?>
+                <?php foreach ($reservasAgrupadas as $key => $reserva): ?>
+                <div class="col-md-4" id="card-<?= htmlspecialchars(implode('-', $reserva['ids'])) ?>" data-ativos="<?= htmlspecialchars(implode(',', $reserva['ativos'])) ?>" data-email="<?= htmlspecialchars($reserva['email_professor']) ?>" data-andar="<?= htmlspecialchars($reserva['andar_nome']) ?>" data-sala="<?= htmlspecialchars($reserva['sala_nome']) ?>" data-reserva="<?= htmlspecialchars($reserva['data_reserva']) ?>" data-hora_retirada="<?= htmlspecialchars($reserva['hora_retirada']) ?>" data-hora_devolucao="<?= htmlspecialchars($reserva['hora_devolucao']) ?>">
+                    <div class="card mb-4 <?= $reserva['status'] === 'devolvido' ? 'card-devolvido' : ($reserva['status'] === 'retirado' ? 'card-retirado' : 'card-custom') ?>">
+                        <div class="card-body">
+                            <h5 class="card-title">Professor: <?= htmlspecialchars($reserva['email_professor']) ?></h5>
+                            <p class="card-text">
+                                Andar: <?= htmlspecialchars($reserva['andar_nome']) ?><br>
+                                Sala: <?= htmlspecialchars($reserva['sala_nome']) ?><br>
+                                Data: <?= htmlspecialchars($reserva['data_reserva']) ?><br>
+                                Retirada: <?= htmlspecialchars($reserva['hora_retirada']) ?><br>
+                                Devolução: <?= htmlspecialchars($reserva['hora_devolucao']) ?><br>
+                                Ativos: <?= htmlspecialchars(implode(', ', $reserva['ativos'])) ?><br>
+                            </p>
+                            <button class="btn btn-danger" onclick="cancelarReserva(<?= htmlspecialchars(json_encode($reserva['ids'])) ?>)">Cancelar Reserva</button>
+                            <?= $reserva['status'] === 'retirado' ? '<button class="btn btn-primary" onclick="devolverTotal(' . htmlspecialchars(json_encode($reserva['ids'])) . ')">Devolução Total</button>' : '<button class="btn btn-success" onclick="marcarRetirado(' . htmlspecialchars(json_encode($reserva['ids'])) . ')">Retirar</button>' ?>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>Nenhuma reserva encontrada para a data selecionada.</p>
+            <?php endif; ?>
         </div>
     </div>
 
