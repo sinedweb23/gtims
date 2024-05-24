@@ -6,7 +6,7 @@ $date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
 function fetch_reservas($date, $conn_gestao, $conn_chamado) {
     $sql = "SELECT reservas.*, chromebooks.Nome AS ativo_nome, a.nome AS andar_nome, s.nome AS sala_nome 
             FROM reservas
-            JOIN chromebooks ON reservas.ativo_id = chromebooks.id
+            JOIN chromebooks ON reservas.ativo_id = chromebooks.ID
             JOIN chamado.salas AS s ON reservas.sala_id = s.id
             JOIN chamado.andares AS a ON s.id_andar = a.id
             WHERE reservas.data_reserva = :date
@@ -154,10 +154,21 @@ if (isset($_GET['ajax'])) {
                         ids.forEach(id => {
                             const card = document.getElementById('card-' + id);
                             if (card) {
-                                card.querySelector('.btn-success').remove();
-                                card.querySelector('.btn-primary').style.display = 'inline-block';
                                 card.classList.remove('card-custom');
                                 card.classList.add('card-retirado');
+                                const button = card.querySelector('button.btn-success');
+                                if (button) {
+                                    button.remove();
+                                }
+                                const cancelButton = card.querySelector('button.btn-danger');
+                                if (cancelButton) {
+                                    cancelButton.remove();
+                                }
+                                const newButton = document.createElement('button');
+                                newButton.className = 'btn btn-primary';
+                                newButton.textContent = 'Devolução Total';
+                                newButton.setAttribute('onclick', 'devolverTotal(' + JSON.stringify(ids) + ')');
+                                card.querySelector('.card-body').appendChild(newButton);
                             }
                         });
                     } else {
