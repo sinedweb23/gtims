@@ -24,8 +24,8 @@ try {
             'email_professor' => $reserva['email_professor']
         ]);
 
-        // Atualizar o status da reserva para devolvido
-        $sql = "UPDATE reservas SET status = 'devolvido' WHERE id = :id";
+        // Remover a reserva
+        $sql = "DELETE FROM reservas WHERE id = :id";
         $stmt = $conn_gestao->prepare($sql);
         $stmt->execute(['id' => $id]);
     }
