@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($andar_existe && $sala_existe) {
         // Buscar quantidade de ativos disponíveis
-        $sql = "SELECT COUNT(*) as quantidade FROM chromebooks WHERE ID NOT IN (
+        $sql = "SELECT COUNT(*) as quantidade FROM chromebooks WHERE id NOT IN (
                     SELECT ativo_id FROM reservas 
                     WHERE data_reserva = :data_reserva
                     AND (
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($ativos_quantidade <= $ativos_disponiveis) {
             // Buscar ativos disponíveis na sequência
-            $sql = "SELECT ID FROM chromebooks WHERE ID NOT IN (
+            $sql = "SELECT id FROM chromebooks WHERE id NOT IN (
                         SELECT ativo_id FROM reservas 
                         WHERE data_reserva = :data_reserva
                         AND (
@@ -61,8 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $ativos = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
             foreach ($ativos as $ativo_id) {
-                $sql = "INSERT INTO reservas (ativo_id, email_professor, andar_id, sala_id, data_reserva, hora_retirada, hora_devolucao) 
-                        VALUES (:ativo_id, :email_professor, :andar_id, :sala_id, :data_reserva, :hora_retirada, :hora_devolucao)";
+                $sql = "INSERT INTO reservas (ativo_id, email_professor, andar_id, sala_id, data_reserva, hora_retirada, hora_devolucao, status) 
+                        VALUES (:ativo_id, :email_professor, :andar_id, :sala_id, :data_reserva, :hora_retirada, :hora_devolucao, 'pendente')";
                 $stmt = $conn_gestao->prepare($sql);
                 $stmt->execute([
                     'ativo_id' => $ativo_id,
@@ -93,6 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     showModal(false, 0, '', '', '', 'Quantidade indisponível para a data selecionada. Disponível: <?= $ativos_disponiveis ?> ativos.');
 </script>
 <?php endif; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
