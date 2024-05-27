@@ -82,7 +82,7 @@ if (isset($_GET['ajax'])) {
                     }
                 });
         }
-
+//test
         function fetchReservas() {
             const date = document.getElementById('date').value;
             fetch(`reservas_dia.php?ajax=1&date=${date}`)
