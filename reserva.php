@@ -112,6 +112,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Reserva de Chromebook</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .logo {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 20px;
+            max-width: 100%; /* Para tornar o logo responsivo */
+            height: auto; /* Para manter a proporção */
+        }
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+    </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Definir a data atual como padrão
@@ -239,6 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <div class="container">
+        <a href="abertura_chamado.php" class="btn btn-secondary back-button">Voltar</a>
         <div class="text-center">
             <img src="logo.png" alt="Logo" class="img-fluid my-3">
         </div>
