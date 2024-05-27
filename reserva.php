@@ -17,69 +17,81 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sala_id = $_POST['sala_id'];
     $ativos_quantidade = $_POST['ativos_quantidade'];
 
-    // Verificar se andar_id e sala_id são válidos
-    $stmt = $conn_chamado->prepare("SELECT COUNT(*) FROM andares WHERE id = :andar_id");
-    $stmt->execute(['andar_id' => $andar_id]);
-    $andar_existe = $stmt->fetchColumn();
+    // Capturar data e hora atuais
+    $current_datetime = new DateTime();
+    
+    // Combinar data e hora da retirada para verificar se é futuro
+    $reserva_datetime = DateTime::createFromFormat('Y-m-d H:i', $data_reserva . ' ' . $hora_retirada);
 
-    $stmt = $conn_chamado->prepare("SELECT COUNT(*) FROM salas WHERE id = :sala_id AND id_andar = :andar_id");
-    $stmt->execute(['sala_id' => $sala_id, 'andar_id' => $andar_id]);
-    $sala_existe = $stmt->fetchColumn();
+    if ($reserva_datetime < $current_datetime) {
+        $reserva_error = true;
+        $error_message = 'A data e hora da reserva devem ser futuras.';
+    } else {
+        // Verificar se andar_id e sala_id são válidos
+        $stmt = $conn_chamado->prepare("SELECT COUNT(*) FROM andares WHERE id = :andar_id");
+        $stmt->execute(['andar_id' => $andar_id]);
+        $andar_existe = $stmt->fetchColumn();
 
-    if ($andar_existe && $sala_existe) {
-        // Buscar quantidade de ativos disponíveis
-        $sql = "SELECT COUNT(*) as quantidade FROM chromebooks WHERE ID NOT IN (
-                    SELECT ativo_id FROM reservas 
-                    WHERE data_reserva = :data_reserva
-                    AND (
-                        (hora_retirada < :hora_devolucao AND hora_devolucao > :hora_retirada)
-                    )
-                )";
-        $stmt = $conn_gestao->prepare($sql);
-        $stmt->execute([
-            'data_reserva' => $data_reserva,
-            'hora_retirada' => $hora_retirada,
-            'hora_devolucao' => $hora_devolucao
-        ]);
-        $ativos_disponiveis = $stmt->fetchColumn();
+        $stmt = $conn_chamado->prepare("SELECT COUNT(*) FROM salas WHERE id = :sala_id AND id_andar = :andar_id");
+        $stmt->execute(['sala_id' => $sala_id, 'andar_id' => $andar_id]);
+        $sala_existe = $stmt->fetchColumn();
 
-        if ($ativos_quantidade <= $ativos_disponiveis) {
-            // Buscar ativos disponíveis na sequência
-            $sql = "SELECT ID FROM chromebooks WHERE ID NOT IN (
+        if ($andar_existe && $sala_existe) {
+            // Buscar quantidade de ativos disponíveis
+            $sql = "SELECT COUNT(*) as quantidade FROM chromebooks WHERE ID NOT IN (
                         SELECT ativo_id FROM reservas 
                         WHERE data_reserva = :data_reserva
                         AND (
                             (hora_retirada < :hora_devolucao AND hora_devolucao > :hora_retirada)
                         )
-                    ) LIMIT :quantidade";
+                    )";
             $stmt = $conn_gestao->prepare($sql);
-            $stmt->bindParam(':data_reserva', $data_reserva);
-            $stmt->bindParam(':hora_retirada', $hora_retirada);
-            $stmt->bindParam(':hora_devolucao', $hora_devolucao);
-            $stmt->bindParam(':quantidade', $ativos_quantidade, PDO::PARAM_INT);
-            $stmt->execute();
-            $ativos = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            $stmt->execute([
+                'data_reserva' => $data_reserva,
+                'hora_retirada' => $hora_retirada,
+                'hora_devolucao' => $hora_devolucao
+            ]);
+            $ativos_disponiveis = $stmt->fetchColumn();
 
-            foreach ($ativos as $ativo_id) {
-                $sql = "INSERT INTO reservas (ativo_id, email_professor, andar_id, sala_id, data_reserva, hora_retirada, hora_devolucao) 
-                        VALUES (:ativo_id, :email_professor, :andar_id, :sala_id, :data_reserva, :hora_retirada, :hora_devolucao)";
+            if ($ativos_quantidade <= $ativos_disponiveis) {
+                // Buscar ativos disponíveis na sequência
+                $sql = "SELECT ID FROM chromebooks WHERE ID NOT IN (
+                            SELECT ativo_id FROM reservas 
+                            WHERE data_reserva = :data_reserva
+                            AND (
+                                (hora_retirada < :hora_devolucao AND hora_devolucao > :hora_retirada)
+                            )
+                        ) LIMIT :quantidade";
                 $stmt = $conn_gestao->prepare($sql);
-                $stmt->execute([
-                    'ativo_id' => $ativo_id,
-                    'email_professor' => $email_professor,
-                    'andar_id' => $andar_id,
-                    'sala_id' => $sala_id,
-                    'data_reserva' => $data_reserva,
-                    'hora_retirada' => $hora_retirada,
-                    'hora_devolucao' => $hora_devolucao
-                ]);
+                $stmt->bindParam(':data_reserva', $data_reserva);
+                $stmt->bindParam(':hora_retirada', $hora_retirada);
+                $stmt->bindParam(':hora_devolucao', $hora_devolucao);
+                $stmt->bindParam(':quantidade', $ativos_quantidade, PDO::PARAM_INT);
+                $stmt->execute();
+                $ativos = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+                foreach ($ativos as $ativo_id) {
+                    $sql = "INSERT INTO reservas (ativo_id, email_professor, andar_id, sala_id, data_reserva, hora_retirada, hora_devolucao) 
+                            VALUES (:ativo_id, :email_professor, :andar_id, :sala_id, :data_reserva, :hora_retirada, :hora_devolucao)";
+                    $stmt = $conn_gestao->prepare($sql);
+                    $stmt->execute([
+                        'ativo_id' => $ativo_id,
+                        'email_professor' => $email_professor,
+                        'andar_id' => $andar_id,
+                        'sala_id' => $sala_id,
+                        'data_reserva' => $data_reserva,
+                        'hora_retirada' => $hora_retirada,
+                        'hora_devolucao' => $hora_devolucao
+                    ]);
+                }
+                $reserva_success = true;
+            } else {
+                $reserva_error = true;
+                $error_message = 'Quantidade indisponível para a data selecionada. Disponível: ' . $ativos_disponiveis . ' ativos.';
             }
-            $reserva_success = true;
         } else {
-            $reserva_error = true;
+            echo "Erro: Andar ou Sala inválido.";
         }
-    } else {
-        echo "Erro: Andar ou Sala inválido.";
     }
 }
 ?>
@@ -90,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </script>
 <?php elseif ($reserva_error): ?>
 <script>
-    showModal(false, 0, '', '', '', 'Quantidade indisponível para a data selecionada. Disponível: <?= $ativos_disponiveis ?> ativos.');
+    showModal(false, 0, '', '', '', '<?= $error_message ?>');
 </script>
 <?php endif; ?>
 <!DOCTYPE html>
@@ -103,7 +115,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Definir a data atual como padrão
-            document.getElementById('data_reserva').valueAsDate = new Date();
+            var now = new Date();
+            document.getElementById('data_reserva').valueAsDate = now;
+
+            // Desativar datas passadas
+            var today = now.toISOString().split('T')[0];
+            document.getElementById('data_reserva').setAttribute('min', today);
+
             // Gerar opções de horas com intervalos de 30 minutos entre 07:00 e 18:00
             function generateTimeOptions(selectElement) {
                 for (let h = 7; h <= 17; h++) {
@@ -125,6 +143,60 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             generateTimeOptions(document.getElementById('hora_retirada'));
             generateTimeOptions(document.getElementById('hora_devolucao'));
+
+            function disablePastTimes() {
+                var data_reserva = document.getElementById('data_reserva').value;
+                var now = new Date();
+                var selectedDate = new Date(data_reserva);
+
+                if (selectedDate.toDateString() === now.toDateString()) {
+                    var currentTime = now.getHours() * 60 + now.getMinutes();
+                    var hora_retirada = document.getElementById('hora_retirada');
+                    var options = hora_retirada.options;
+
+                    for (let i = 0; i < options.length; i++) {
+                        let time = options[i].value.split(':');
+                        let optionTime = parseInt(time[0]) * 60 + parseInt(time[1]);
+
+                        if (optionTime <= currentTime) {
+                            options[i].disabled = true;
+                        } else {
+                            options[i].disabled = false;
+                        }
+                    }
+
+                    var hora_devolucao = document.getElementById('hora_devolucao');
+                    options = hora_devolucao.options;
+
+                    for (let i = 0; i < options.length; i++) {
+                        let time = options[i].value.split(':');
+                        let optionTime = parseInt(time[0]) * 60 + parseInt(time[1]);
+
+                        if (optionTime <= currentTime) {
+                            options[i].disabled = true;
+                        } else {
+                            options[i].disabled = false;
+                        }
+                    }
+                } else {
+                    var hora_retirada = document.getElementById('hora_retirada');
+                    var options = hora_retirada.options;
+
+                    for (let i = 0; i < options.length; i++) {
+                        options[i].disabled = false;
+                    }
+
+                    var hora_devolucao = document.getElementById('hora_devolucao');
+                    options = hora_devolucao.options;
+
+                    for (let i = 0; i < options.length; i++) {
+                        options[i].disabled = false;
+                    }
+                }
+            }
+
+            document.getElementById('data_reserva').addEventListener('change', disablePastTimes);
+            disablePastTimes(); // Execute na inicialização
         });
 
         function fetchAvailableAtivos() {
@@ -266,7 +338,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php if ($reserva_success): ?>
         showModal(true, <?= $ativos_quantidade ?>, '<?= $data_reserva ?>', '<?= $hora_retirada ?>', '<?= $hora_devolucao ?>');
         <?php elseif ($reserva_error): ?>
-        showModal(false, 0, '', '', '', 'Quantidade indisponível para a data selecionada. Disponível: <?= $ativos_disponiveis ?> ativos.');
+        showModal(false, 0, '', '', '', '<?= $error_message ?>');
         <?php endif; ?>
     </script>
 </body>
