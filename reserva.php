@@ -254,7 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <div class="container">
-        <a href="abertura_chamado.php" class="btn btn-secondary back-button">Voltar</a>
+        <a href="chamado/abertura_chamado.php" class="btn btn-secondary back-button">Voltar</a>
         <div class="text-center">
             <img src="logo.png" alt="Logo" class="img-fluid my-3">
         </div>
