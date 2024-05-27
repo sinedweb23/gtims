@@ -32,7 +32,7 @@ foreach ($reservas as $reserva) {
             'hora_devolucao' => $reserva['hora_devolucao'],
             'ativos' => [],
             'ids' => [],
-            'status' => isset($reserva['status']) ? $reserva['status'] : 'pendente' // Adiciona um valor padrão para status
+            'status' => isset($reserva['status']) ? $reserva['status'] : 'pendente' // Adiciona um valor padrão para status.
         ];
     }
     $reservasAgrupadas[$key]['ativos'][] = $reserva['ativo_nome'];
