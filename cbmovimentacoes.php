@@ -39,11 +39,9 @@ try {
     $total_results = $stmt->rowCount();
 
     // Adiciona limite e offset para paginação
-    $query .= " ORDER BY d.DataEmprestimo DESC LIMIT :limit OFFSET :offset";
+    $query .= " ORDER BY d.DataEmprestimo DESC LIMIT $limit OFFSET $offset";
 
     $stmt = $conn_gestao->prepare($query);
-    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute($params);
     $devolucoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -132,7 +130,7 @@ try {
             <ul class="pagination justify-content-center">
                 <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                     <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
-                        <a class="page-link" href="?page=<?= $i ?>&ativo_id=<?= $ativo_id ?>&data_inicio=<?= $data_inicio ?>&data_fim=<?= $data_fim ?>"><?= $i ?></a>
+                        <a class="page-link" href="cbmovimentacoes.php?page=<?= $i ?>&ativo_id=<?= $ativo_id ?>&data_inicio=<?= $data_inicio ?>&data_fim=<?= $data_fim ?>"><?= $i ?></a>
                     </li>
                 <?php endfor; ?>
             </ul>
