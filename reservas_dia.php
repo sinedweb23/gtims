@@ -18,7 +18,7 @@ function fetch_reservas($date, $conn_gestao, $conn_chamado) {
 
 $reservas = fetch_reservas($date, $conn_gestao, $conn_chamado);
 
-// Agrupar reservas por professor e data
+// Agrupar reservas por professor e data.
 $reservasAgrupadas = [];
 foreach ($reservas as $reserva) {
     $key = $reserva['email_professor'] . '_' . $reserva['data_reserva'];
