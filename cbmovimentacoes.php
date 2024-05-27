@@ -1,161 +1,135 @@
 <?php
-include 'config.php';
+include 'db_connect.php';
 
-$filtro_chromebook = isset($_POST['filtro_chromebook']) ? $_POST['filtro_chromebook'] : '';
-$filtro_data = isset($_POST['filtro_data']) ? $_POST['filtro_data'] : '';
-$page = isset($_GET['page']) ? $_GET['page'] : 1; // Página atual
+// Configurações de paginação
+$limit = 20;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
 
-$limit = 30; // Número de registros por página
-$offset = ($page - 1) * $limit; // Offset para consulta no banco de dados
+// Filtros
+$ativo_id = isset($_GET['ativo_id']) ? (int)$_GET['ativo_id'] : null;
+$data_inicio = isset($_GET['data_inicio']) ? $_GET['data_inicio'] : null;
+$data_fim = isset($_GET['data_fim']) ? $_GET['data_fim'] : null;
 
-// Processa o formulário de filtro
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $filtro_chromebook = $_POST['filtro_chromebook'];
-    $filtro_data = $_POST['filtro_data'];
+// Query base
+$query = "SELECT d.*, r.data_reserva, r.hora_retirada, r.hora_devolucao 
+          FROM devolucoes d 
+          JOIN reservas r ON d.reserva_id = r.id 
+          WHERE 1=1";
+
+// Adiciona filtros
+$params = [];
+if ($ativo_id) {
+    $query .= " AND d.ChromebookID = :ativo_id";
+    $params['ativo_id'] = $ativo_id;
+}
+if ($data_inicio) {
+    $query .= " AND d.DataEmprestimo >= :data_inicio";
+    $params['data_inicio'] = $data_inicio;
+}
+if ($data_fim) {
+    $query .= " AND d.DataEmprestimo <= :data_fim";
+    $params['data_fim'] = $data_fim;
 }
 
-// Constrói a consulta SQL com paginação e filtros
-$sql = "SELECT m.ID, c.Nome AS NomeChromebook, m.DataEmprestimo, m.HoraEmprestimo, m.Usuario, m.DataHoraDevolucao 
-        FROM cbmovimentacoes m 
-        INNER JOIN chromebooks c ON m.ChromebookID = c.ID 
-        WHERE 1=1";
+// Conta total de registros
+$stmt = $conn_gestao->prepare($query);
+$stmt->execute($params);
+$total_results = $stmt->rowCount();
 
-if (!empty($filtro_chromebook)) {
-    $sql .= " AND c.Nome = '$filtro_chromebook'";
-}
+// Adiciona limite e offset para paginação
+$query .= " ORDER BY d.DataEmprestimo DESC LIMIT :limit OFFSET :offset";
+$params['limit'] = $limit;
+$params['offset'] = $offset;
 
-if (!empty($filtro_data)) {
-    $filtro_data = date('Y-m-d', strtotime($filtro_data));
-    $sql .= " AND DATE(m.DataEmprestimo) = '$filtro_data'";
-}
+$stmt = $conn_gestao->prepare($query);
+$stmt->execute($params);
+$devolucoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Ordenação por data ascendente
-$sql .= " ORDER BY m.DataEmprestimo ASC ";
-// Adiciona limit e offset para paginação
-$sql .= " LIMIT $limit OFFSET $offset";
-
-$result = $conn->query($sql);
+// Calcula total de páginas
+$total_pages = ceil($total_results / $limit);
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Movimentações de Ativos</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        h1 {
-            margin-bottom: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .form-group {
-            margin-bottom: 10px;
-        }
-        .pagination {
-            margin-top: 20px;
-        }
-        .pagination a {
-            display: inline-block;
-            padding: 5px 10px;
-            border: 1px solid #ddd;
-            margin-right: 5px;
-            text-decoration: none;
-        }
-        .pagination a.active {
-            background-color: #f2f2f2;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Histórico de Empréstimos</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Registro de Movimentações de chromebooks</h1>
+    <div class="container mt-5">
+        <h1 class="text-center">Histórico de Empréstimos</h1>
+        <form method="GET" action="historico.php" class="mt-4">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="ativo_id">Ativo</label>
+                    <select id="ativo_id" name="ativo_id" class="form-control">
+                        <option value="">Selecione o ativo</option>
+                        <?php
+                        $stmt = $conn_gestao->query("SELECT ID FROM chromebooks");
+                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                            $selected = ($ativo_id == $row['ID']) ? 'selected' : '';
+                            echo "<option value='{$row['ID']}' $selected>Chromebook {$row['ID']}</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="data_inicio">Data Início</label>
+                    <input type="date" id="data_inicio" name="data_inicio" class="form-control" value="<?= $data_inicio ?>">
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="data_fim">Data Fim</label>
+                    <input type="date" id="data_fim" name="data_fim" class="form-control" value="<?= $data_fim ?>">
+                </div>
+                <div class="form-group col-md-2">
+                    <button type="submit" class="btn btn-primary mt-4">Filtrar</button>
+                </div>
+            </div>
+        </form>
 
-    <!-- Formulário de  filtro -->
-    <form method="post">
-        <div class="form-group">
-            <label for="filtro_chromebook">Filtrar por Chromebook:</label>
-            <select id="filtro_chromebook" name="filtro_chromebook">
-                <option value="">Selecionar Chromebook</option>
-                <?php
-                // Consulta para obter os nomes dos chromebooks
-                $sql_chromebooks = "SELECT Nome FROM chromebooks";
-                $result_chromebooks = $conn->query($sql_chromebooks);
-                if ($result_chromebooks->num_rows > 0) {
-                    while ($row = $result_chromebooks->fetch_assoc()) {
-                        $selected = ($row['Nome'] == $filtro_chromebook) ? 'selected' : '';
-                        echo "<option value='".$row['Nome']."' $selected>".$row['Nome']."</option>";
-                    }
-                }
-                ?>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="filtro_data">Filtrar por Data de Empréstimo:</label>
-            <input type="date" id="filtro_data" name="filtro_data" value="<?= htmlspecialchars($filtro_data) ?>">
-        </div>
-        <button type="submit">Filtrar</button>
-    </form>
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Reserva ID</th>
+                    <th>Chromebook ID</th>
+                    <th>Data Empréstimo</th>
+                    <th>Hora Empréstimo</th>
+                    <th>Email Professor</th>
+                    <th>Data Hora Devolução</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($devolucoes as $devolucao): ?>
+                    <tr>
+                        <td><?= $devolucao['id'] ?></td>
+                        <td><?= $devolucao['reserva_id'] ?></td>
+                        <td><?= $devolucao['ChromebookID'] ?></td>
+                        <td><?= $devolucao['DataEmprestimo'] ?></td>
+                        <td><?= $devolucao['HoraEmprestimo'] ?></td>
+                        <td><?= $devolucao['email_professor'] ?></td>
+                        <td><?= $devolucao['DataHoraDevolucao'] ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Chromebook</th>
-                <th>Data do Empréstimo</th>
-                <th>Hora do Empréstimo</th>
-                <th>Usuário</th>
-                <th>Data e Hora da Devolução</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>".$row['ID']."</td>";
-                    echo "<td>".$row['NomeChromebook']."</td>";
-                    echo "<td>".$row['DataEmprestimo']."</td>";
-                    echo "<td>".$row['HoraEmprestimo']."</td>";
-                    echo "<td>".$row['Usuario']."</td>";
-                    echo "<td>".$row['DataHoraDevolucao']."</td>";
-                    echo "</tr>";
-                }
-            } else {
-                echo "<tr><td colspan='6'>Nenhum registro encontrado.</td></tr>";
-            }
-            ?>
-        </tbody>
-    </table>
+        <nav>
+            <ul class="pagination justify-content-center">
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                        <a class="page-link" href="?page=<?= $i ?>&ativo_id=<?= $ativo_id ?>&data_inicio=<?= $data_inicio ?>&data_fim=<?= $data_fim ?>"><?= $i ?></a>
+                    </li>
+                <?php endfor; ?>
+            </ul>
+        </nav>
+    </div>
 
-    <!-- Adiciona links de paginação -->
-    <?php
-    $total_pages_sql = "SELECT COUNT(*) AS total FROM cbmovimentacoes";
-    $result_total = $conn->query($total_pages_sql);
-    $total_rows = $result_total->fetch_assoc()['total'];
-    $total_pages = ceil($total_rows / $limit);
-
-    echo "<div class='pagination'>";
-    echo "<span>Páginas:</span>";
-    for ($i = 1; $i <= $total_pages; $i++) {
-        $active_class = ($i == $page) ? 'active' : '';
-        echo "<a class='$active_class' href='?page=$i'>$i</a>";
-    }
-    echo "</div>";
-    ?>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
