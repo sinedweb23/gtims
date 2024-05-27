@@ -71,10 +71,10 @@ try {
                     <select id="ativo_id" name="ativo_id" class="form-control">
                         <option value="">Selecione o ativo</option>
                         <?php
-                        $stmt = $conn_gestao->query("SELECT ID FROM chromebooks");
+                        $stmt = $conn_gestao->query("SELECT ID, Nome FROM chromebooks");
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             $selected = ($ativo_id == $row['ID']) ? 'selected' : '';
-                            echo "<option value='{$row['ID']}' $selected>Chromebook {$row['ID']}</option>";
+                            echo "<option value='{$row['ID']}' $selected>{$row['Nome']} ({$row['ID']})</option>";
                         }
                         ?>
                     </select>
