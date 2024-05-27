@@ -38,9 +38,7 @@ $stmt->execute($params);
 $total_results = $stmt->rowCount();
 
 // Adiciona limite e offset para paginação
-$query .= " ORDER BY d.DataEmprestimo DESC LIMIT :limit OFFSET :offset";
-$params['limit'] = $limit;
-$params['offset'] = $offset;
+$query .= " ORDER BY d.DataEmprestimo DESC LIMIT $limit OFFSET $offset";
 
 $stmt = $conn_gestao->prepare($query);
 $stmt->execute($params);
