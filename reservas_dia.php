@@ -78,7 +78,7 @@ if (isset($_GET['ajax'])) {
                     if (data === 'success') {
                         ids.forEach(id => document.getElementById('card-' + id).remove());
                     } else {
-                        alert('Erro ao cancelar a reserva.');
+                        //alert('Erro ao cancelar a reserva.');
                     }
                 });
         }
@@ -172,7 +172,7 @@ if (isset($_GET['ajax'])) {
                             }
                         });
                     } else {
-                        alert('Erro ao marcar como retirado.');
+                        //alert('Erro ao marcar como retirado.');
                     }
                 });
         }
@@ -195,7 +195,7 @@ if (isset($_GET['ajax'])) {
                             }
                         });
                     } else {
-                        alert('Erro ao marcar como devolvido.');
+                       // alert('Erro ao marcar como devolvido.');
                     }
                 });
         }
