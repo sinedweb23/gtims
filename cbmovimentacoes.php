@@ -59,7 +59,7 @@ $total_pages = ceil($total_results / $limit);
 <body>
     <div class="container mt-5">
         <h1 class="text-center">Histórico de Empréstimos</h1>
-        <form method="GET" action="historico.php" class="mt-4">
+        <form method="GET" action="cbmovimentacoes.php" class="mt-4">
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for="ativo_id">Ativo</label>
