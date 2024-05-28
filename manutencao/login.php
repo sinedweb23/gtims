@@ -1,69 +1,49 @@
 <?php
-// Ativar exibição de erros
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 session_start();
+include('config1.php'); // Inclua a conexão com o banco de dados
 
-// Verificar se o formulário foi enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Conectar ao banco de dados
-    include 'db_connect.php';
-    
     $email = $_POST['email'];
-    $password = $_POST['password'];
-    
-    // Verificar se o usuário existe no banco de dados
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if ($result->num_rows > 0) {
-        $user = $result->fetch_assoc();
-        // Verificar a senha
-        if (password_verify($password, $user['password'])) {
-            $_SESSION['user_id'] = $user['id'];
-            header("Location: home.php");
-            exit();
-        } else {
-            $error = "Senha incorreta.";
-        }
+    $senha = $_POST['senha'];
+
+    $query = "SELECT * FROM usuarios WHERE email = '$email'";
+    $result = mysqli_query($conn, $query);
+    $user = mysqli_fetch_assoc($result);
+
+    if ($user && password_verify($senha, $user['senha'])) {
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['permissao'] = $user['permissao'];
+        header("Location: index.php");
     } else {
-        $error = "Usuário não encontrado.";
+        $error = "Email ou senha inválidos.";
     }
 }
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1 class="text-center mt-5">Login</h1>
-        <?php if (!empty($error)): ?>
-            <div class="alert alert-danger"><?= $error ?></div>
-        <?php endif; ?>
-        <form method="POST" action="login.php" class="mt-4">
+        <h2 class="mt-5">Login</h2>
+        <form method="post" action="login.php">
             <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" class="form-control" required>
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" required>
             </div>
             <div class="form-group">
-                <label for="password">Senha</label>
-                <input type="password" id="password" name="password" class="form-control" required>
+                <label for="senha">Senha:</label>
+                <input type="password" class="form-control" id="senha" name="senha" required>
             </div>
+            <?php if (isset($error)): ?>
+                <div class="alert alert-danger"><?php echo $error; ?></div>
+            <?php endif; ?>
             <button type="submit" class="btn btn-primary">Entrar</button>
         </form>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
