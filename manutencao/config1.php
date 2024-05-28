@@ -1,8 +1,8 @@
 <?php
 // Parâmetros de conexão com o banco de dados
 $servername = "localhost";
-$username = "root";
-$password = ""; // Senha em branco
+$username = "suporte";
+$password = "Msul.2024"; // Senha em branco
 $database = "manutencao";
 
 // Tenta realizar a conexão com o banco de dados
