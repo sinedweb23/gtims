@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('config.php'); // Inclua a conexão com o banco de dados
+include('config1.php'); // Inclua a conexão com o banco de dados
 
 if ($_SESSION['permissao'] != 'admin') {
     header("Location: erro_permissao.php");
