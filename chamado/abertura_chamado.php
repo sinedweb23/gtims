@@ -36,7 +36,7 @@
 </head>
 <body>
     <div class="container text-center">
-        <img src="logotipoms.png" alt="Logo" class="logo img-fluid">
+        <img src="banner.png" alt="Logo" class="logo img-fluid">
         <div class="row justify-content-center">
             <div class="col-6 col-sm-4 col-md-3 menu-item">
                 <a href="../reserva.php">
