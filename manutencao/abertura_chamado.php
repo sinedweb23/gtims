@@ -68,7 +68,7 @@ $result_defeitos = $conn->query($sql_defeitos);
 <body>
     <div class="container mt-5">
         <!-- Adiciona o botão voltar -->
-        <a href="abertura_chamado.php" class="btn btn-secondary back-button">Voltar</a>
+        <a href="..\chamado\abertura_chamado.php" class="btn btn-secondary back-button">Voltar</a>
         <!-- Adiciona o logo no topo -->
         <img src="logo.png" alt="Logo" class="logo">
         <h2 class="mb-4">Abertura de Chamado</h2>
