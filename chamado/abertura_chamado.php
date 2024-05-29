@@ -49,7 +49,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <a href="reserva.php">
+                <a href="../reserva.php">
                     <img src="cb.png" class="btn-img img-fluid" alt="Reserva">
                 </a>
             </div>
