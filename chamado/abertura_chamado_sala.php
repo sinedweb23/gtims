@@ -71,7 +71,7 @@ $result_defeitos = $conn->query($sql_defeitos);
         <a href="abertura_chamado.php" class="btn btn-secondary back-button">Voltar</a>
         <!-- Adiciona o logo no topo -->
         <img src="banner.png" alt="Logo" class="logo">
-        <h2 class="mb-4">Abertura de Chamado</h2>
+        <h2 class="mb-4">Abertura de Chamado TI</h2>
         <!-- Exibe a mensagem -->
         <?php if (!empty($mensagem)): ?>
             <div class="alert alert-<?php echo $mensagem == "Chamado aberto com sucesso!" ? "success" : "danger"; ?>" role="alert">

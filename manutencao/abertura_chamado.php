@@ -41,7 +41,7 @@ $result_defeitos = $conn->query($sql_defeitos);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abertura de Chamado</title>
+    <title>Manutenção</title>
     <!-- Link para o Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Estilo para o logo responsivo -->
@@ -71,7 +71,7 @@ $result_defeitos = $conn->query($sql_defeitos);
         <a href="..\chamado\abertura_chamado.php" class="btn btn-secondary back-button">Voltar</a>
         <!-- Adiciona o logo no topo -->
         <img src="logo.png" alt="Logo" class="logo">
-        <h2 class="mb-4">Abertura de Chamado</h2>
+        <h2 class="mb-4">Abertura de Chamado Manutenção</h2>
         <!-- Exibe a mensagem -->
         <?php if (!empty($mensagem)): ?>
             <div class="alert alert-<?php echo $mensagem == "Chamado aberto com sucesso!" ? "success" : "danger"; ?>" role="alert">
