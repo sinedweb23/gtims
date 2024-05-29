@@ -100,6 +100,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Reserva de Chromebook</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+    </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var dataReservaInput = document.getElementById('data_reserva');
@@ -198,6 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <div class="container">
+          <a href="..\chamado\abertura_chamado.php" class="btn btn-secondary back-button">Voltar</a>
         <div class="text-center">
             <img src="logo.png" alt="Logo" class="img-fluid my-3">
         </div>
