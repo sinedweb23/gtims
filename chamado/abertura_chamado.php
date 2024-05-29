@@ -37,7 +37,7 @@
         <img src="logo.png" class="logo img-fluid" alt="Logo" width="150">
         <div class="row">
             <div class="col-6">
-                <a href="chamado/abertura_chamado_sala.php">
+                <a href="abertura_chamado_sala.php">
                     <img src="ti.png" class="btn-img img-fluid" alt="TI">
                 </a>
             </div>
