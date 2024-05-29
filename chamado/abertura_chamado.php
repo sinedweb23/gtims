@@ -42,7 +42,7 @@
                 </a>
             </div>
             <div class="col-6">
-                <a href="manutencao/abertura_chamado.php">
+                <a href="../manutencao/abertura_chamado.php">
                     <img src="manu.png" class="btn-img img-fluid" alt="Manutenção">
                 </a>
             </div>
