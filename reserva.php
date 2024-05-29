@@ -205,9 +205,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <div class="container">
-          <a href="..\chamado\abertura_chamado.php" class="btn btn-secondary back-button">Voltar</a>
+         
         <div class="text-center">
-            <img src="logo.png" alt="Logo" class="img-fluid my-3">
+        <a href="..\chamado\abertura_chamado.php">
+    <img src="logo.png" alt="Logo" class="img-fluid my-3">
+</a>
+
         </div>
         <h1 class="text-center mt-3">Reserva de Chromebook</h1>
         <div id="error_message" class="text-danger text-center"></div>
