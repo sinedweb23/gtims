@@ -59,6 +59,14 @@ if (!isset($_SESSION['user_id'])) {
             .sidebar {
                 display: none;
             }
+            .navbar-nav {
+                display: block;
+            }
+        }
+        @media (min-width: 768px) {
+            .navbar-nav {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -114,6 +122,12 @@ if (!isset($_SESSION['user_id'])) {
                         <li class="nav-item">
                             <a class="nav-link" href="usuarios.php" target="iframe_a"><i class="fas fa-users"></i> Usuários</a>
                         </li>
+                        <li class="nav-item">
+                    <a class="nav-link" target="iframe_a" href="minha_conta.php"><i class="fas fa-user"></i> Editar meus dados</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </li>
                     </ul>
                 </div>
             </nav>

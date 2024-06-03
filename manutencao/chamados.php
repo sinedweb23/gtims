@@ -39,130 +39,106 @@ $result_fechados = $conn->query($sql_fechados);
             height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden;
+            overflow-x: hidden;
         }
         .container-fluid {
             padding: 0;
             height: 100%;
-            overflow: auto; /* Permite que a página cresça conforme necessário */
-        }
-        .table-responsive {
-            height: 50%; /* Ajustar altura para exibir metade da tela */
             overflow-y: auto;
         }
-        .table {
-            margin: 0;
+        .card {
+            margin: 10px 0;
+            border: none; /* Remove border */
         }
-        .table thead th {
-            position: sticky;
-            top: 0;
-            background: #f8f9fa;
-        }
-        /* Estilo para chamados abertos */
-        .status-aberto {
+        .status-aberto .card-body {
             background-color: #f8d7da !important; /* Vermelho claro */
         }
-        /* Estilo para chamados em atendimento */
-        .status-em-atendimento {
+        .status-em-atendimento .card-body {
             background-color: #fff3cd !important; /* Amarelo claro */
         }
-        /* Estilo para chamados fechados */
-        .status-fechado {
+        .status-fechado .card-body {
             background-color: #d4edda !important; /* Verde claro */
+        }
+        .card-body p {
+            margin: 0.5rem 0;
+        }
+        @media (max-width: 767.98px) {
+            .card {
+                margin: 10px 5px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container-fluid">
         <h5 class="m-2">Chamados</h5>
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Solicitante</th>
-                        <th>Sala</th>
-                        <th>Problema</th>
-                        <th>Observação</th>
-                        <th>Status</th>
-                        <th>Data de Abertura</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody id="chamadosTable">
-                    <?php
-                    if ($result_chamados && $result_chamados->num_rows > 0) {
-                        while($row = $result_chamados->fetch_assoc()) {
-                            $status_class = '';
-                            if ($row["status"] == 'Aberto') {
-                                $status_class = 'status-aberto';
-                            } elseif ($row["status"] == 'Em Atendimento') {
-                                $status_class = 'status-em-atendimento';
-                            } elseif ($row["status"] == 'Fechado') {
-                                $status_class = 'status-fechado';
-                            }
-
-                            echo "<tr class='".$status_class."'>";
-                            echo "<td>".$row["id"]."</td>";
-                            echo "<td>".$row["solicitante"]."</td>";
-                            echo "<td>".$row["nome_sala"]."</td>";
-                            echo "<td>".$row["nome_defeito"]."</td>";
-                            echo "<td>".$row["observacao"]."</td>";
-                            echo "<td>".$row["status"]."</td>";
-                            echo "<td>".$row["data_abertura"]."</td>";
-                            echo "<td>
-                                    <select class='form-control' onchange='alterarStatus(this, ".$row["id"].")'>
-                                        <option value='Aberto'".($row["status"] == 'Aberto' ? ' selected' : '').">Aberto</option>
-                                        <option value='Em Atendimento'".($row["status"] == 'Em Atendimento' ? ' selected' : '').">Em Atendimento</option>
-                                        <option value='Fechado'>Fechado</option>
-                                    </select>
-                                  </td>";
-                            echo "</tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='8'>Nenhum chamado encontrado.</td></tr>";
+        <div class="row">
+            <?php
+            if ($result_chamados && $result_chamados->num_rows > 0) {
+                while($row = $result_chamados->fetch_assoc()) {
+                    $status_class = '';
+                    if ($row["status"] == 'Aberto') {
+                        $status_class = 'status-aberto';
+                    } elseif ($row["status"] == 'Em Atendimento') {
+                        $status_class = 'status-em-atendimento';
+                    } elseif ($row["status"] == 'Fechado') {
+                        $status_class = 'status-fechado';
                     }
-                    ?>
-                </tbody>
-            </table>
+            ?>
+            <div class="col-12">
+                <div class="card <?php echo $status_class; ?>">
+                    <div class="card-body">
+                        <p><strong>ID:</strong> <?php echo $row["id"]; ?></p>
+                        <p><strong>Solicitante:</strong> <?php echo $row["solicitante"]; ?></p>
+                        <p><strong>Sala:</strong> <?php echo $row["nome_sala"]; ?></p>
+                        <p><strong>Problema:</strong> <?php echo $row["nome_defeito"]; ?></p>
+                        <p><strong>Observação:</strong> <?php echo $row["observacao"]; ?></p>
+                        <p><strong>Status:</strong> <?php echo $row["status"]; ?></p>
+                        <p><strong>Data de Abertura:</strong> <?php echo $row["data_abertura"]; ?></p>
+                        <p>
+                            <select class="form-control" onchange="alterarStatus(this, <?php echo $row['id']; ?>)">
+                                <option value="Aberto" <?php echo $row["status"] == 'Aberto' ? 'selected' : ''; ?>>Aberto</option>
+                                <option value="Em Atendimento" <?php echo $row["status"] == 'Em Atendimento' ? 'selected' : ''; ?>>Em Atendimento</option>
+                                <option value="Fechado">Fechado</option>
+                            </select>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <?php
+                }
+            } else {
+                echo "<div class='col-12'><p>Nenhum chamado encontrado.</p></div>";
+            }
+            ?>
         </div>
 
         <h5 class="m-2">Chamados Fechados Hoje</h5>
-        <div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Solicitante</th>
-                        <th>Sala</th>
-                        <th>Problema</th>
-                        <th>Observação</th>
-                        <th>Status</th>
-                        <th>Data de Abertura</th>
-                        <th>Data de Fechamento</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if ($result_fechados && $result_fechados->num_rows > 0) {
-                        while($row = $result_fechados->fetch_assoc()) {
-                            echo "<tr class='status-fechado'>";
-                            echo "<td>".$row["id"]."</td>";
-                            echo "<td>".$row["solicitante"]."</td>";
-                            echo "<td>".$row["nome_sala"]."</td>";
-                            echo "<td>".$row["nome_defeito"]."</td>";
-                            echo "<td>".$row["observacao"]."</td>";
-                            echo "<td>".$row["status"]."</td>";
-                            echo "<td>".$row["data_abertura"]."</td>";
-                            echo "<td>".$row["data_fechamento"]."</td>";
-                            echo "</tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='9'>Nenhum chamado fechado hoje.</td></tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
+        <div class="row">
+            <?php
+            if ($result_fechados && $result_fechados->num_rows > 0) {
+                while($row = $result_fechados->fetch_assoc()) {
+            ?>
+            <div class="col-12">
+                <div class="card status-fechado">
+                    <div class="card-body">
+                        <p><strong>ID:</strong> <?php echo $row["id"]; ?></p>
+                        <p><strong>Solicitante:</strong> <?php echo $row["solicitante"]; ?></p>
+                        <p><strong>Sala:</strong> <?php echo $row["nome_sala"]; ?></p>
+                        <p><strong>Problema:</strong> <?php echo $row["nome_defeito"]; ?></p>
+                        <p><strong>Observação:</strong> <?php echo $row["observacao"]; ?></p>
+                        <p><strong>Status:</strong> <?php echo $row["status"]; ?></p>
+                        <p><strong>Data de Abertura:</strong> <?php echo $row["data_abertura"]; ?></p>
+                        <p><strong>Data de Fechamento:</strong> <?php echo $row["data_fechamento"]; ?></p>
+                    </div>
+                </div>
+            </div>
+            <?php
+                }
+            } else {
+                echo "<div class='col-12'><p>Nenhum chamado fechado hoje.</p></div>";
+            }
+            ?>
         </div>
     </div>
 
