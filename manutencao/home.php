@@ -42,13 +42,18 @@ while ($row = mysqli_fetch_assoc($result_defeitos)) {
     <title>Dashboard</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .card-clickable {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
         <h2>Dashboard de Chamados</h2>
         <div class="row">
             <div class="col-md-4">
-                <div class="card text-white bg-primary mb-3">
+                <div class="card text-white bg-primary mb-3 card-clickable" onclick="window.location.href='chamados.php'">
                     <div class="card-header">Chamados Abertos</div>
                     <div class="card-body">
                         <h5 class="card-title"><?php echo $total_abertos; ?></h5>
