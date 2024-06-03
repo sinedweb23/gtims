@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manuteção Morumbi Sul</title>
+    <title>Manutenção Morumbi Sul</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
@@ -55,6 +55,11 @@ if (!isset($_SESSION['user_id'])) {
             background-color: red;
             color: white;
         }
+        @media (max-width: 767.98px) {
+            .sidebar {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -67,6 +72,20 @@ if (!isset($_SESSION['user_id'])) {
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" target="iframe_a" href="home.php"><i class="fas fa-home"></i> Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="iframe_a" href="chamados.php"><i class="fas fa-ticket-alt"></i> Chamados 
+                        <span id="chamadosCount" class="badge badge-danger">0</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="iframe_a" href="historico_chamados.php"><i class="fas fa-history"></i> Histórico de Chamados</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="iframe_a" href="usuarios.php"><i class="fas fa-users"></i> Usuários</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" target="iframe_a" href="minha_conta.php"><i class="fas fa-user"></i> Editar meus dados</a>
                 </li>
