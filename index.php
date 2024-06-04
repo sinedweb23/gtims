@@ -103,6 +103,8 @@ $gitVersion = getGitVersion();
         <ul>
             <li><a href="chamado/chamados.php" target="iframe"><i class="fas fa-home"></i> Chamados <span id="chamadosNotification" class="badge badge-pill badge-danger ml-1"></span></a></li>
             <li><a href="chamado/historico_chamados.php" target="iframe"><i class="fas fa-history"></i> Histórico de Chamados</a></li>
+            <li><a href="https://morumbisul.com.br/chamado" target="_blank"><i class="fas fa-history"></i>Abertura de Chamados</a></li>
+
             <li>
                 <a href="#"><i class="fas fa-boxes"></i> Estoque</a>
                 <ul class="submenu">
