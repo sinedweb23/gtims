@@ -89,6 +89,11 @@ if (!isset($_SESSION['user_id'])) {
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" target="iframe_a" href="chamados_material.php"><i class="fas fa-box"></i> Requisições 
+                        <span id="requisicoesCount" class="badge badge-danger">0</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" target="iframe_a" href="historico_chamados.php"><i class="fas fa-history"></i> Histórico de Chamados</a>
                 </li>
                 <li class="nav-item">
@@ -117,17 +122,22 @@ if (!isset($_SESSION['user_id'])) {
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="chamados_material.php" target="iframe_a"><i class="fas fa-box"></i> Requisições 
+                                <span id="requisicoesCount" class="badge badge-danger">0</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="historico_chamados.php" target="iframe_a"><i class="fas fa-history"></i> Histórico de Chamados</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="usuarios.php" target="iframe_a"><i class="fas fa-users"></i> Usuários</a>
                         </li>
                         <li class="nav-item">
-                    <a class="nav-link" target="iframe_a" href="minha_conta.php"><i class="fas fa-user"></i> Editar meus dados</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                </li>
+                            <a class="nav-link" target="iframe_a" href="minha_conta.php"><i class="fas fa-user"></i> Editar meus dados</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -142,7 +152,7 @@ if (!isset($_SESSION['user_id'])) {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Verifica o número de chamados abertos periodicamente
+        // Verifica o número de chamados abertos e requisições periodicamente
         function checkChamados() {
             fetch('verificar_chamados_abertos.php')
                 .then(response => response.json())
@@ -161,8 +171,29 @@ if (!isset($_SESSION['user_id'])) {
                 .catch(error => console.error('Erro ao verificar chamados abertos:', error));
         }
 
-        // Verifica os chamados abertos a cada 10 segundos
-        setInterval(checkChamados, 10000);
+        function checkRequisicoes() {
+            fetch('verificar_requisicoes.php')
+                .then(response => response.json())
+                .then(data => {
+                    const requisicoesCountElement = document.getElementById('requisicoesCount');
+                    const currentCount = parseInt(requisicoesCountElement.textContent);
+                    
+                    if (data.count > currentCount) {
+                        // Toca o som de notificação se houver novas requisições
+                        const audio = new Audio('notificacao.mp3');
+                        audio.play();
+                    }
+
+                    requisicoesCountElement.textContent = data.count;
+                })
+                .catch(error => console.error('Erro ao verificar requisições:', error));
+        }
+
+        // Verifica os chamados e requisições a cada 10 segundos
+        setInterval(() => {
+            checkChamados();
+            checkRequisicoes();
+        }, 1000);
     });
     </script>
 </body>
