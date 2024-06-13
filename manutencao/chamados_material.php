@@ -98,6 +98,7 @@ if (!$result_chamados) {
                             <select class="form-control" onchange="alterarStatus(this, <?php echo $row['id']; ?>)">
                                 <option value="Aguardando Aprovação" <?php echo $row["status"] == 'Aguardando Aprovação' ? 'selected' : ''; ?>>Aguardando Aprovação</option>
                                 <option value="Comprado">Comprado</option>
+                                <option value="Reprovado">Reprovado</option>
                             </select>
                         </p>
                     </div>
