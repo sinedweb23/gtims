@@ -171,7 +171,7 @@ if (!$result_fechados) {
             var solucao = "";
             var requisicoes = "";
 
-            if (status === 'Fechado') {
+            if (status === 'Fechado' || status === 'Reprovado') {
                 solucao = prompt("Por favor, descreva a solução adotada:");
                 if (solucao === null || solucao.trim() === "") {
                     // Se não houver entrada ou for uma string vazia, resetar para o status anterior e sair da função

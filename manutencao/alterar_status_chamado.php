@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif ($status == 'Comprado') {
         $sql = "UPDATE chamados SET status = 'Aberto', requisicoes = NULL WHERE id = '$chamado_id'";
     } elseif ($status == 'Reprovado') {
-        $sql = "UPDATE chamados SET status = '$status' WHERE id = '$chamado_id'";
+        $sql = "UPDATE chamados SET status = '$status', solucao = '$solucao' WHERE id = '$chamado_id'";
     } else {
         $sql = "UPDATE chamados SET status = '$status', solucao = '$solucao' WHERE id = '$chamado_id'";
     }
