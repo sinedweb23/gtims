@@ -117,6 +117,16 @@ if (!$result_chamados) {
     <script>
         function alterarStatus(selectElement, id) {
             var status = selectElement.value;
+            var observacao = "";
+
+            if (status === 'Reprovado') {
+                observacao = prompt("Por favor, descreva o motivo da reprovação:");
+                if (observacao === null || observacao.trim() === "") {
+                    // Se não houver entrada ou for uma string vazia, resetar para o status anterior e sair da função
+                    selectElement.value = selectElement.querySelector("option[selected]").value;
+                    return;
+                }
+            }
 
             fetch('alterar_status_chamado.php', {
                 method: 'POST',
@@ -125,7 +135,8 @@ if (!$result_chamados) {
                 },
                 body: new URLSearchParams({
                     chamado_id: id,
-                    status: status
+                    status: status,
+                    observacao: observacao
                 })
             })
             .then(response => response.json())

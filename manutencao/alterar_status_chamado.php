@@ -9,18 +9,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obtém os parâmetros do POST
     $chamado_id = $_POST['chamado_id'];
     $status = $_POST['status'];
-    $solucao = isset($_POST['solucao']) ? $_POST['solucao'] : null;
+    $observacao = isset($_POST['observacao']) ? $_POST['observacao'] : null;
     $requisicoes = isset($_POST['requisicoes']) ? $_POST['requisicoes'] : null;
 
     // Sanitiza os dados recebidos
     $chamado_id = mysqli_real_escape_string($conn, $chamado_id);
     $status = mysqli_real_escape_string($conn, $status);
-    $solucao = mysqli_real_escape_string($conn, $solucao);
+    $observacao = mysqli_real_escape_string($conn, $observacao);
     $requisicoes = mysqli_real_escape_string($conn, $requisicoes);
 
     // Lógica de atualização de status
     if ($status == 'Fechado') {
-        $sql = "UPDATE chamados SET status = '$status', solucao = '$solucao', requisicoes = NULL WHERE id = '$chamado_id'";
+        $sql = "UPDATE chamados SET status = '$status', solucao = '$observacao', requisicoes = NULL WHERE id = '$chamado_id'";
     } elseif ($status == 'Aguardando Material') {
         $sql = "UPDATE chamados SET status = '$status', requisicoes = '$requisicoes' WHERE id = '$chamado_id'";
     } elseif ($status == 'Aguardando Aprovação') {
@@ -28,9 +28,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif ($status == 'Comprado') {
         $sql = "UPDATE chamados SET status = 'Aberto', requisicoes = NULL WHERE id = '$chamado_id'";
     } elseif ($status == 'Reprovado') {
-        $sql = "UPDATE chamados SET status = '$status', solucao = '$solucao' WHERE id = '$chamado_id'";
+        $sql = "UPDATE chamados SET status = '$status', observacao = '$observacao' WHERE id = '$chamado_id'";
     } else {
-        $sql = "UPDATE chamados SET status = '$status', solucao = '$solucao' WHERE id = '$chamado_id'";
+        $sql = "UPDATE chamados SET status = '$status', solucao = '$observacao' WHERE id = '$chamado_id'";
     }
 
     if ($conn->query($sql) === TRUE) {
