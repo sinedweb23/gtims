@@ -13,7 +13,7 @@ $sql_chamados = "SELECT c.id, c.nome AS solicitante, s.nome AS nome_sala, d.nome
                 FROM chamados c
                 INNER JOIN salas s ON c.id_sala = s.id
                 INNER JOIN defeitos d ON c.id_defeito = d.id
-                WHERE c.status = 'Aberto' OR c.status = 'Em Atendimento' OR c.status = 'Aguardando Material'
+                WHERE (c.status = 'Aberto' OR c.status = 'Em Atendimento' OR c.status = 'Aguardando Material') AND c.status != 'Reprovado'
                 ORDER BY c.data_abertura DESC";
 
 // Consulta o banco de dados para obter os chamados fechados de hoje
@@ -120,7 +120,8 @@ if (!$result_fechados) {
                                 <option value="Aberto" <?php echo $row["status"] == 'Aberto' ? 'selected' : ''; ?>>Aberto</option>
                                 <option value="Em Atendimento" <?php echo $row["status"] == 'Em Atendimento' ? 'selected' : ''; ?>>Em Atendimento</option>
                                 <option value="Aguardando Material" <?php echo $row["status"] == 'Aguardando Material' ? 'selected' : ''; ?>>Aguardando Material</option>
-                                <option value="Fechado">Fechado</option>
+                                <option value="Fechado" <?php echo $row["status"] == 'Fechado' ? 'selected' : ''; ?>>Fechado</option>
+                                <option value="Reprovado" <?php echo $row["status"] == 'Reprovado' ? 'selected' : ''; ?>>Reprovado</option>
                             </select>
                         </p>
                     </div>
@@ -141,7 +142,7 @@ if (!$result_fechados) {
                 while($row = $result_fechados->fetch_assoc()) {
             ?>
             <div class="col-12">
-                <div class="card status-Fechado">
+                <div class="card status-fechado">
                     <div class="card-body">
                         <p><strong>ID:</strong> <?php echo $row["id"]; ?></p>
                         <p><strong>Solicitante:</strong> <?php echo $row["solicitante"]; ?></p>

@@ -97,6 +97,9 @@ if (!isset($_SESSION['user_id'])) {
                     <a class="nav-link" target="iframe_a" href="historico_chamados.php"><i class="fas fa-history"></i> Histórico de Chamados</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" target="iframe_a" href="historico_chamados_reprovados.php"><i class="fas fa-history"></i> Chamados Reprovados</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" target="iframe_a" href="usuarios.php"><i class="fas fa-users"></i> Usuários</a>
                 </li>
                 <li class="nav-item">
@@ -128,6 +131,9 @@ if (!isset($_SESSION['user_id'])) {
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="historico_chamados.php" target="iframe_a"><i class="fas fa-history"></i> Histórico de Chamados</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="historico_chamados_reprovados.php" target="iframe_a"><i class="fas fa-history"></i>Chamados Reprovados</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="usuarios.php" target="iframe_a"><i class="fas fa-users"></i> Usuários</a>
