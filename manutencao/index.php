@@ -85,12 +85,12 @@ if (!isset($_SESSION['user_id'])) {
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" target="iframe_a" href="chamados.php"><i class="fas fa-ticket-alt"></i> Chamados 
-                        <span id="chamadosCount" class="badge badge-danger">0</span>
+                        <span class="chamadosCount badge badge-danger">0</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" target="iframe_a" href="chamados_material.php"><i class="fas fa-box"></i> Requisições 
-                        <span id="requisicoesCount" class="badge badge-danger">0</span>
+                        <span class="requisicoesCount badge badge-danger">0</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -121,19 +121,19 @@ if (!isset($_SESSION['user_id'])) {
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="chamados.php" target="iframe_a"><i class="fas fa-ticket-alt"></i> Chamados 
-                                <span id="chamadosCount" class="badge badge-danger">0</span>
+                                <span class="chamadosCount badge badge-danger">0</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="chamados_material.php" target="iframe_a"><i class="fas fa-box"></i> Requisições 
-                                <span id="requisicoesCount" class="badge badge-danger">0</span>
+                                <span class="requisicoesCount badge badge-danger">0</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="historico_chamados.php" target="iframe_a"><i class="fas fa-history"></i> Histórico de Chamados</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="historico_chamados_reprovados.php" target="iframe_a"><i class="fas fa-history"></i>Chamados Reprovados</a>
+                            <a class="nav-link" href="historico_chamados_reprovados.php" target="iframe_a"><i class="fas fa-history"></i> Chamados Reprovados</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="usuarios.php" target="iframe_a"><i class="fas fa-users"></i> Usuários</a>
@@ -163,16 +163,18 @@ if (!isset($_SESSION['user_id'])) {
             fetch('verificar_chamados_abertos.php')
                 .then(response => response.json())
                 .then(data => {
-                    const chamadosCountElement = document.getElementById('chamadosCount');
-                    const currentCount = parseInt(chamadosCountElement.textContent);
-                    
-                    if (data.count > currentCount) {
-                        // Toca o som de notificação se houver novos chamados
-                        const audio = new Audio('notificacao.mp3');
-                        audio.play();
-                    }
+                    const chamadosCountElements = document.querySelectorAll('.chamadosCount');
+                    chamadosCountElements.forEach(element => {
+                        const currentCount = parseInt(element.textContent);
+                        
+                        if (data.count > currentCount) {
+                            // Toca o som de notificação se houver novos chamados
+                            const audio = new Audio('notificacao.mp3');
+                            audio.play();
+                        }
 
-                    chamadosCountElement.textContent = data.count;
+                        element.textContent = data.count;
+                    });
                 })
                 .catch(error => console.error('Erro ao verificar chamados abertos:', error));
         }
@@ -181,16 +183,18 @@ if (!isset($_SESSION['user_id'])) {
             fetch('verificar_requisicoes.php')
                 .then(response => response.json())
                 .then(data => {
-                    const requisicoesCountElement = document.getElementById('requisicoesCount');
-                    const currentCount = parseInt(requisicoesCountElement.textContent);
-                    
-                    if (data.count > currentCount) {
-                        // Toca o som de notificação se houver novas requisições
-                        const audio = new Audio('notificacao.mp3');
-                        audio.play();
-                    }
+                    const requisicoesCountElements = document.querySelectorAll('.requisicoesCount');
+                    requisicoesCountElements.forEach(element => {
+                        const currentCount = parseInt(element.textContent);
+                        
+                        if (data.count > currentCount) {
+                            // Toca o som de notificação se houver novas requisições
+                            const audio = new Audio('notificacao.mp3');
+                            audio.play();
+                        }
 
-                    requisicoesCountElement.textContent = data.count;
+                        element.textContent = data.count;
+                    });
                 })
                 .catch(error => console.error('Erro ao verificar requisições:', error));
         }
@@ -199,7 +203,7 @@ if (!isset($_SESSION['user_id'])) {
         setInterval(() => {
             checkChamados();
             checkRequisicoes();
-        }, 1000);
+        }, 10000);
     });
     </script>
 </body>
