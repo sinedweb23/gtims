@@ -102,7 +102,7 @@
                         break;
                 }
                 ?>
-                <div class="col-12">
+                <div class="col-12 col-md-2 mb-3">
                     <div class="card card-status <?= $class ?>">
                         <div class="card-body text-center">
                             <h5 class="card-title"><?= $status ?></h5>
@@ -193,7 +193,7 @@
     <!-- Incluindo Bootstrap JS e jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.amazonaws.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 </body>
 </html>
