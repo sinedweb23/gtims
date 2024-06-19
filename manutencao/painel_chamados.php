@@ -28,7 +28,10 @@
             margin-bottom: 20px;
         }
         .card-body {
-            padding: 15px;
+            padding: 1px;
+            padding-top: 7px;
+            padding-left: 7px;
+            padding-right: 7px
         }
         .card-status {
             min-height: 150px;
