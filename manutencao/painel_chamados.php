@@ -102,7 +102,7 @@
                         break;
                 }
                 ?>
-                <div class="col-md-2">
+                <div class="col-12">
                     <div class="card card-status <?= $class ?>">
                         <div class="card-body text-center">
                             <h5 class="card-title"><?= $status ?></h5>
@@ -159,7 +159,7 @@
                 while($row = $result->fetch_assoc()) {
                     $data_abertura = date("d/m/Y - H:i", strtotime($row['data_abertura']));
                     $data_fechamento = $row['data_fechamento'] ? date("d/m/Y - H:i", strtotime($row['data_fechamento'])) : '';
-                    echo '<div class="col-md-6">';
+                    echo '<div class="col-12">';
                     echo '<div class="card">';
                     echo '<div class="card-body">';
                     echo '<div class="d-flex justify-content-between">';
