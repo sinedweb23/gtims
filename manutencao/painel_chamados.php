@@ -6,6 +6,8 @@
     <title>Painel de Chamados</title>
     <!-- Incluindo Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Incluindo Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <!-- Estilos CSS customizados -->
     <link rel="icon" type="image/png" href="logo.png">
 
@@ -45,6 +47,9 @@
         }
         .card-reprovado {
             background-color: #e6ccff;
+        }
+        .icon {
+            margin-right: 5px;
         }
     </style>
 </head>
@@ -160,13 +165,13 @@
                     echo '<h5 class="card-title">' . $row['nome_sala'] . '</h5>';
                     echo '<h6 class="card-subtitle mb-2 text-muted">' . $row['nome_defeito'] . '</h6>';
                     echo '<p class="card-text">Observação: ' . $row['observacao'] . '</p>';
-                    echo '<p class="card-text">Status: ' . $row['status'] . '</p>';
-                    echo '<p class="card-text">Data de Abertura: ' . $data_abertura . '</p>';
+                    echo '<p class="card-text"><i class="fas fa-check-circle icon"></i>Status: ' . $row['status'] . '</p>';
+                    echo '<p class="card-text"><i class="fas fa-calendar-alt icon"></i>Data de Abertura: ' . $data_abertura . '</p>';
                     if ($row['status'] == 'Fechado') {
-                        echo '<p class="card-text">Solução: ' . $row['solucao_requisicoes'] . '</p>';
-                        echo '<p class="card-text">Data de Fechamento: ' . $data_fechamento . '</p>';
+                        echo '<p class="card-text"><i class="fas fa-check icon"></i>Solução: ' . $row['solucao_requisicoes'] . '</p>';
+                        echo '<p class="card-text"><i class="fas fa-calendar-alt icon"></i>Data de Fechamento: ' . $data_fechamento . '</p>';
                     } elseif ($row['status'] == 'Aguardando Material') {
-                        echo '<p class="card-text">Requisições: ' . $row['solucao_requisicoes'] . '</p>';
+                        echo '<p class="card-text"><i class="fas fa-box icon"></i>Requisições: ' . $row['solucao_requisicoes'] . '</p>';
                     }
                     echo '</div>';
                     echo '</div>';
@@ -184,6 +189,7 @@
     <!-- Incluindo Bootstrap JS e jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.amazonaws.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 </body>
 </html>
