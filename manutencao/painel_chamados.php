@@ -51,6 +51,9 @@
         .icon {
             margin-right: 5px;
         }
+        .chamado-antigo {
+            border-left: 5px solid red;
+        }
     </style>
 </head>
 <body>
@@ -149,7 +152,7 @@
                 $sql_chamados .= " WHERE c.status = '$status'";
             }
 
-            $sql_chamados .= " ORDER BY c.data_abertura DESC";
+            $sql_chamados .= " ORDER BY c.data_abertura ASC";
 
             $result = $conn->query($sql_chamados);
 
@@ -159,8 +162,20 @@
                 while($row = $result->fetch_assoc()) {
                     $data_abertura = date("d/m/Y - H:i", strtotime($row['data_abertura']));
                     $data_fechamento = $row['data_fechamento'] ? date("d/m/Y - H:i", strtotime($row['data_fechamento'])) : '';
+
+                    // Calcula a diferença de dias
+                    $data_abertura_timestamp = strtotime($row['data_abertura']);
+                    $data_atual_timestamp = time();
+                    $diff_dias = ($data_atual_timestamp - $data_abertura_timestamp) / (60 * 60 * 24);
+
+                    // Adiciona classe se chamado estiver aberto há mais de 2 dias
+                    $chamado_class = '';
+                    if ($row['status'] == 'Aberto' && $diff_dias > 2) {
+                        $chamado_class = 'chamado-antigo';
+                    }
+
                     echo '<div class="col-12">';
-                    echo '<div class="card">';
+                    echo '<div class="card ' . $chamado_class . '">';
                     echo '<div class="card-body">';
                     echo '<div class="d-flex justify-content-between">';
                     echo '<h5 class="card-title">' . $row['nome_sala'] . '</h5>';
@@ -193,7 +208,7 @@
     <!-- Incluindo Bootstrap JS e jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.amazonaws.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 </body>
 </html>
