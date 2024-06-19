@@ -7,6 +7,8 @@
     <!-- Incluindo Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Estilos CSS customizados -->
+    <link rel="icon" type="image/png" href="logo.png">
+
     <style>
         body {
             font-family: Arial, sans-serif;
