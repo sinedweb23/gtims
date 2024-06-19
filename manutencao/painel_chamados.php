@@ -51,7 +51,7 @@
         <div class="text-center mb-4">
             <img src="logo.png" alt="Logo da Empresa" class="logo">
         </div>
-        <h2 class="text-center mb-4">Painel de Chamados</h2>
+        
         
         <?php
         // Inclui o arquivo de configuração do banco de dados
