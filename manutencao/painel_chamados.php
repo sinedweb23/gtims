@@ -152,6 +152,8 @@
             if ($result->num_rows > 0) {
                 // Exibe os dados encontrados em cards responsivos
                 while($row = $result->fetch_assoc()) {
+                    $data_abertura = date("d/m/Y - H:i", strtotime($row['data_abertura']));
+                    $data_fechamento = $row['data_fechamento'] ? date("d/m/Y - H:i", strtotime($row['data_fechamento'])) : '';
                     echo '<div class="col-md-6">';
                     echo '<div class="card">';
                     echo '<div class="card-body">';
@@ -159,9 +161,10 @@
                     echo '<h6 class="card-subtitle mb-2 text-muted">' . $row['nome_defeito'] . '</h6>';
                     echo '<p class="card-text">Observação: ' . $row['observacao'] . '</p>';
                     echo '<p class="card-text">Status: ' . $row['status'] . '</p>';
-                    echo '<p class="card-text">Data de Abertura: ' . $row['data_abertura'] . '</p>';
+                    echo '<p class="card-text">Data de Abertura: ' . $data_abertura . '</p>';
                     if ($row['status'] == 'Fechado') {
                         echo '<p class="card-text">Solução: ' . $row['solucao_requisicoes'] . '</p>';
+                        echo '<p class="card-text">Data de Fechamento: ' . $data_fechamento . '</p>';
                     } elseif ($row['status'] == 'Aguardando Material') {
                         echo '<p class="card-text">Requisições: ' . $row['solucao_requisicoes'] . '</p>';
                     }
