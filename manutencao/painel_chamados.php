@@ -9,7 +9,7 @@
     <!-- Incluindo Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <!-- Estilos CSS customizados -->
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="fav.png">
 
     <style>
         body {
