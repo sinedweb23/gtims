@@ -162,11 +162,15 @@
                     echo '<div class="col-md-6">';
                     echo '<div class="card">';
                     echo '<div class="card-body">';
+                    echo '<div class="d-flex justify-content-between">';
                     echo '<h5 class="card-title">' . $row['nome_sala'] . '</h5>';
                     echo '<h6 class="card-subtitle mb-2 text-muted">' . $row['nome_defeito'] . '</h6>';
+                    echo '</div>';
                     echo '<p class="card-text">Observação: ' . $row['observacao'] . '</p>';
+                    echo '<div class="d-flex justify-content-between">';
                     echo '<p class="card-text"><i class="fas fa-check-circle icon"></i>Status: ' . $row['status'] . '</p>';
                     echo '<p class="card-text"><i class="fas fa-calendar-alt icon"></i>Data de Abertura: ' . $data_abertura . '</p>';
+                    echo '</div>';
                     if ($row['status'] == 'Fechado') {
                         echo '<p class="card-text"><i class="fas fa-check icon"></i>Solução: ' . $row['solucao_requisicoes'] . '</p>';
                         echo '<p class="card-text"><i class="fas fa-calendar-alt icon"></i>Data de Fechamento: ' . $data_fechamento . '</p>';
