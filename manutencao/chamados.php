@@ -13,7 +13,7 @@ $sql_chamados = "SELECT c.id, c.nome AS solicitante, s.nome AS nome_sala, d.nome
                 FROM chamados c
                 INNER JOIN salas s ON c.id_sala = s.id
                 INNER JOIN defeitos d ON c.id_defeito = d.id
-                WHERE c.status = 'Aberto'
+                WHERE c.status = 'Aberto' OR c.status = 'Em Atendimento'
                 ORDER BY c.data_abertura DESC";
 
 // Consulta o banco de dados para obter os chamados fechados de hoje
