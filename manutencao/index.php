@@ -13,6 +13,7 @@ if (!isset($_SESSION['user_id'])) {
     <title>Manutenção Morumbi Sul</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <style>
         body, html {
             height: 100%;
@@ -68,6 +69,14 @@ if (!isset($_SESSION['user_id'])) {
                 display: none;
             }
         }
+        #sla_chart {
+            width: 100%;
+            height: 200px;
+        }
+        .sla-container {
+            text-align: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -108,6 +117,12 @@ if (!isset($_SESSION['user_id'])) {
                 <li class="nav-item">
                     <a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </li>
+                <!-- Adicionando o gráfico de SLA aqui -->
+                <li class="nav-item sla-container">
+                    <h3>SLA dos Chamados</h3>
+                    <div id="sla_chart"></div>
+                    <div id="sla_hours" style="font-size: 20px; margin-top: 10px;"></div>
+                </li>
             </ul>
         </div>
     </nav>
@@ -133,7 +148,7 @@ if (!isset($_SESSION['user_id'])) {
                             <a class="nav-link" href="historico_chamados.php" target="iframe_a"><i class="fas fa-history"></i> Histórico de Chamados</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="historico_chamados_reprovados.php" target="iframe_a"><i class="fas fa-history"></i> Chamados Reprovados</a>
+                            <a class="nav-link" href="historico_chamados_reprovados.php" target="iframe_a"><i class="fas fa-times-circle"></i> Chamados Reprovados</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="usuarios.php" target="iframe_a"><i class="fas fa-users"></i> Usuários</a>
@@ -143,6 +158,16 @@ if (!isset($_SESSION['user_id'])) {
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" target="iframe_a" href="configurar_sla.php"><i class="fas fa-cogs"></i>Configurar SLA</a>
+                        </li>
+                        <!-- Adicionando o gráfico de SLA aqui também para versão desktop -->
+                        <li class="nav-item sla-container">
+                            <h3>SLA dos Chamados</h3>
+                            <div id="sla_chart_desktop"></div>
+                            <div id="sla_hours_desktop" style="font-size: 20px; margin-top: 10px;"></div>
                         </li>
                     </ul>
                 </div>
@@ -204,6 +229,52 @@ if (!isset($_SESSION['user_id'])) {
             checkChamados();
             checkRequisicoes();
         }, 10000);
+
+        google.charts.load('current', {'packages':['gauge']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Label', 'Value'],
+                ['SLA (%)', 0]
+            ]);
+
+            var options = {
+                width: 200, height: 200,
+                redFrom: 0, redTo: 40,
+                yellowFrom: 40, yellowTo: 70,
+                greenFrom: 70, greenTo: 100,
+                minorTicks: 5
+            };
+
+            var chart_mobile = new google.visualization.Gauge(document.getElementById('sla_chart'));
+            var chart_desktop = new google.visualization.Gauge(document.getElementById('sla_chart_desktop'));
+
+            // Update the chart with data from the server
+            setInterval(function() {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "get_sla_data.php", true);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        try {
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.error) {
+                                console.error('Error:', response.error);
+                            } else {
+                                data.setValue(0, 1, response.sla.percentage);
+                                chart_mobile.draw(data, options);
+                                chart_desktop.draw(data, options);
+                                document.getElementById('sla_hours').innerText = "SLA em Horas: " + response.sla.hours;
+                                document.getElementById('sla_hours_desktop').innerText = "SLA em Horas: " + response.sla.hours;
+                            }
+                        } catch (e) {
+                            console.error('Invalid JSON:', xhr.responseText);
+                        }
+                    }
+                };
+                xhr.send();
+            }, 1000);
+        }
     });
     </script>
 </body>
