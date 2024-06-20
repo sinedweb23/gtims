@@ -1,17 +1,19 @@
 <?php
-// Configuração do banco de dados
 $servername = "localhost";
 $username = "suporte";
 $password = "Msul.2024#";
-$dbname = "gestao_ti"; // Substitua 'nome_do_banco' pelo nome do seu banco de dados
+$dbname_gestao = "gestao_ti";
+$dbname_chamado = "chamado"; // Nome do banco de dados onde as tabelas salas e andares estão
 
-// Criando a conexão
-$conn = new mysqli($servername, $username, $password, $dbname);
+try {
+    // Conexão com o banco de dados gestao_ti
+    $conn_gestao = new PDO("mysql:host=$servername;dbname=$dbname_gestao", $username, $password);
+    $conn_gestao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Verificando a conexão
-if ($conn->connect_error) {
-    die("Conexão falhou: " . $conn->connect_error);
+    // Conexão com o banco de dados chamado
+    $conn_chamado = new PDO("mysql:host=$servername;dbname=$dbname_chamado", $username, $password);
+    $conn_chamado->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
 }
-
-echo "Conexão bem-sucedida!";
 ?>
