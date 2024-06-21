@@ -104,11 +104,27 @@ $result = $conn->query($sqlFinal);
             <button type="submit" class="btn btn-primary">Filtrar</button>
         </form>
 
+       <!-- Formulário para download do PDF -->
+<form method="GET" action="gerar_pdf.php" class="mt-3">
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="data_inicial">Data Inicial</label>
+            <input type="date" class="form-control" id="data_inicial" name="data_inicial" value="2024-06-10" required>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="data_final">Data Final</label>
+            <input type="date" class="form-control" id="data_final" name="data_final" value="2024-06-12" required>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-secondary">Imprimir Relatório</button>
+</form>
+
+
+
         <!-- Tabela de Chamados -->
         <table class="table mt-4">
             <thead>
                 <tr>
-                    
                     <th>Local</th>
                     <th>Problema</th>
                     <th>Prioridade</th>
@@ -126,7 +142,6 @@ $result = $conn->query($sqlFinal);
                     // Exibe os chamados fechados em uma tabela
                     while($row = $result->fetch_assoc()) {
                         echo "<tr>";
-                       
                         echo "<td>".$row["nome_sala"]."</td>";
                         echo "<td>".$row["nome_defeito"]."</td>";
                         echo "<td>".$row["prioridade"]."</td>";
@@ -139,7 +154,7 @@ $result = $conn->query($sqlFinal);
                     }
                 } else {
                     // Se não houver chamados fechados, exibe uma mensagem
-                    echo "<tr><td colspan='9'>Nenhum chamado fechado.</td></tr>";
+                    echo "<tr><td colspan='8'>Nenhum chamado fechado.</td></tr>";
                 }
                 ?>
             </tbody>
