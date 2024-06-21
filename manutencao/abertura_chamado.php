@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['abrir_chamado'])) {
         $mensagem = "Chamado aberto com sucesso!";
         // Redireciona para a página de confirmação após o envio do formulário
         header("Location: confirmacao.php");
-        exit(); // Encerra o script para evitar que o restante do código seja executado após o redirecionamento
+        exit(); // Encerra o script para evitar que o restante do código seja executado após o redirecionamento.
     } else {
         // Se houver um erro, exibe uma mensagem de erro
         $mensagem = "Erro ao abrir o chamado: " . $conn->error;
