@@ -207,7 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="container">
          
         <div class="text-center">
-        <a href="chamado/abertura_chamado.php">
+        <a href="https://sites.google.com/morumbisul.com.br/info/home/chamado">
     <img src="logo.png" alt="Logo" class="img-fluid my-3">
 </a>
 
