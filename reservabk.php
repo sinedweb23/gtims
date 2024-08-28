@@ -17,81 +17,69 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sala_id = $_POST['sala_id'];
     $ativos_quantidade = $_POST['ativos_quantidade'];
 
-    // Capturar data e hora atuais
-    $current_datetime = new DateTime();
-    
-    // Combinar data e hora da retirada para verificar se é futuro
-    $reserva_datetime = DateTime::createFromFormat('Y-m-d H:i', $data_reserva . ' ' . $hora_retirada);
+    // Verificar se andar_id e sala_id são válidos
+    $stmt = $conn_chamado->prepare("SELECT COUNT(*) FROM andares WHERE id = :andar_id");
+    $stmt->execute(['andar_id' => $andar_id]);
+    $andar_existe = $stmt->fetchColumn();
 
-    if ($reserva_datetime < $current_datetime) {
-        $reserva_error = true;
-        $error_message = 'A data e hora da reserva devem ser futuras.';
-    } else {
-        // Verificar se andar_id e sala_id são válidos
-        $stmt = $conn_chamado->prepare("SELECT COUNT(*) FROM andares WHERE id = :andar_id");
-        $stmt->execute(['andar_id' => $andar_id]);
-        $andar_existe = $stmt->fetchColumn();
+    $stmt = $conn_chamado->prepare("SELECT COUNT(*) FROM salas WHERE id = :sala_id AND id_andar = :andar_id");
+    $stmt->execute(['sala_id' => $sala_id, 'andar_id' => $andar_id]);
+    $sala_existe = $stmt->fetchColumn();
 
-        $stmt = $conn_chamado->prepare("SELECT COUNT(*) FROM salas WHERE id = :sala_id AND id_andar = :andar_id");
-        $stmt->execute(['sala_id' => $sala_id, 'andar_id' => $andar_id]);
-        $sala_existe = $stmt->fetchColumn();
+    if ($andar_existe && $sala_existe) {
+        // Buscar quantidade de ativos disponíveis
+        $sql = "SELECT COUNT(*) as quantidade FROM chromebooks WHERE ID NOT IN (
+                    SELECT ativo_id FROM reservas 
+                    WHERE data_reserva = :data_reserva
+                    AND (
+                        (hora_retirada < :hora_devolucao AND hora_devolucao > :hora_retirada)
+                    )
+                )";
+        $stmt = $conn_gestao->prepare($sql);
+        $stmt->execute([
+            'data_reserva' => $data_reserva,
+            'hora_retirada' => $hora_retirada,
+            'hora_devolucao' => $hora_devolucao
+        ]);
+        $ativos_disponiveis = $stmt->fetchColumn();
 
-        if ($andar_existe && $sala_existe) {
-            // Buscar quantidade de ativos disponíveis
-            $sql = "SELECT COUNT(*) as quantidade FROM chromebooks WHERE ID NOT IN (
+        if ($ativos_quantidade <= $ativos_disponiveis) {
+            // Buscar ativos disponíveis na sequência
+            $sql = "SELECT ID FROM chromebooks WHERE ID NOT IN (
                         SELECT ativo_id FROM reservas 
                         WHERE data_reserva = :data_reserva
                         AND (
                             (hora_retirada < :hora_devolucao AND hora_devolucao > :hora_retirada)
                         )
-                    )";
+                    ) LIMIT :quantidade";
             $stmt = $conn_gestao->prepare($sql);
-            $stmt->execute([
-                'data_reserva' => $data_reserva,
-                'hora_retirada' => $hora_retirada,
-                'hora_devolucao' => $hora_devolucao
-            ]);
-            $ativos_disponiveis = $stmt->fetchColumn();
+            $stmt->bindParam(':data_reserva', $data_reserva);
+            $stmt->bindParam(':hora_retirada', $hora_retirada);
+            $stmt->bindParam(':hora_devolucao', $hora_devolucao);
+            $stmt->bindParam(':quantidade', $ativos_quantidade, PDO::PARAM_INT);
+            $stmt->execute();
+            $ativos = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-            if ($ativos_quantidade <= $ativos_disponiveis) {
-                // Buscar ativos disponíveis na sequência
-                $sql = "SELECT ID FROM chromebooks WHERE ID NOT IN (
-                            SELECT ativo_id FROM reservas 
-                            WHERE data_reserva = :data_reserva
-                            AND (
-                                (hora_retirada < :hora_devolucao AND hora_devolucao > :hora_retirada)
-                            )
-                        ) LIMIT :quantidade";
+            foreach ($ativos as $ativo_id) {
+                $sql = "INSERT INTO reservas (ativo_id, email_professor, andar_id, sala_id, data_reserva, hora_retirada, hora_devolucao) 
+                        VALUES (:ativo_id, :email_professor, :andar_id, :sala_id, :data_reserva, :hora_retirada, :hora_devolucao)";
                 $stmt = $conn_gestao->prepare($sql);
-                $stmt->bindParam(':data_reserva', $data_reserva);
-                $stmt->bindParam(':hora_retirada', $hora_retirada);
-                $stmt->bindParam(':hora_devolucao', $hora_devolucao);
-                $stmt->bindParam(':quantidade', $ativos_quantidade, PDO::PARAM_INT);
-                $stmt->execute();
-                $ativos = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
-                foreach ($ativos as $ativo_id) {
-                    $sql = "INSERT INTO reservas (ativo_id, email_professor, andar_id, sala_id, data_reserva, hora_retirada, hora_devolucao) 
-                            VALUES (:ativo_id, :email_professor, :andar_id, :sala_id, :data_reserva, :hora_retirada, :hora_devolucao)";
-                    $stmt = $conn_gestao->prepare($sql);
-                    $stmt->execute([
-                        'ativo_id' => $ativo_id,
-                        'email_professor' => $email_professor,
-                        'andar_id' => $andar_id,
-                        'sala_id' => $sala_id,
-                        'data_reserva' => $data_reserva,
-                        'hora_retirada' => $hora_retirada,
-                        'hora_devolucao' => $hora_devolucao
-                    ]);
-                }
-                $reserva_success = true;
-            } else {
-                $reserva_error = true;
-                $error_message = 'Quantidade indisponível para a data selecionada. Disponível: ' . $ativos_disponiveis . ' ativos.';
+                $stmt->execute([
+                    'ativo_id' => $ativo_id,
+                    'email_professor' => $email_professor,
+                    'andar_id' => $andar_id,
+                    'sala_id' => $sala_id,
+                    'data_reserva' => $data_reserva,
+                    'hora_retirada' => $hora_retirada,
+                    'hora_devolucao' => $hora_devolucao
+                ]);
             }
+            $reserva_success = true;
         } else {
-            echo "Erro: Andar ou Sala inválido.";
+            $reserva_error = true;
         }
+    } else {
+        echo "Erro: Andar ou Sala inválido.";
     }
 }
 ?>
@@ -102,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </script>
 <?php elseif ($reserva_error): ?>
 <script>
-    showModal(false, 0, '', '', '', '<?= $error_message ?>');
+    showModal(false, 0, '', '', '', 'Quantidade indisponível para a data selecionada. Disponível: <?= $ativos_disponiveis ?> ativos.');
 </script>
 <?php endif; ?>
 <!DOCTYPE html>
@@ -113,14 +101,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Reserva de Chromebook</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .logo {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            margin-bottom: 20px;
-            max-width: 100%; /* Para tornar o logo responsivo */
-            height: auto; /* Para manter a proporção */
-        }
         .back-button {
             position: absolute;
             top: 20px;
@@ -129,89 +109,60 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            var dataReservaInput = document.getElementById('data_reserva');
+            var horaRetiradaInput = document.getElementById('hora_retirada');
+            var horaDevolucaoInput = document.getElementById('hora_devolucao');
+            var errorMessageDiv = document.getElementById('error_message');
+
             // Definir a data atual como padrão
             var now = new Date();
-            document.getElementById('data_reserva').valueAsDate = now;
+            var day = ("0" + now.getDate()).slice(-2);
+            var month = ("0" + (now.getMonth() + 1)).slice(-2);
+            var today = now.getFullYear() + '-' + month + '-' + day;
+            dataReservaInput.value = today;
 
             // Desativar datas passadas
-            var today = now.toISOString().split('T')[0];
-            document.getElementById('data_reserva').setAttribute('min', today);
+            dataReservaInput.setAttribute('min', today);
 
-            // Gerar opções de horas com intervalos de 30 minutos entre 07:00 e 18:00
-            function generateTimeOptions(selectElement) {
-                for (let h = 7; h <= 17; h++) {
-                    for (let m = 0; m < 60; m += 30) {
-                        let hour = h < 10 ? '0' + h : h;
-                        let minute = m < 10 ? '0' + m : m;
-                        let option = document.createElement('option');
-                        option.value = hour + ':' + minute;
-                        option.text = hour + ':' + minute;
-                        selectElement.appendChild(option);
-                    }
-                }
-                // Adicionar opção para 18:00
-                let option = document.createElement('option');
-                option.value = '18:00';
-                option.text = '18:00';
-                selectElement.appendChild(option);
-            }
-
-            generateTimeOptions(document.getElementById('hora_retirada'));
-            generateTimeOptions(document.getElementById('hora_devolucao'));
-
-            function disablePastTimes() {
-                var data_reserva = document.getElementById('data_reserva').value;
+            function updateHoraRetirada() {
                 var now = new Date();
-                var selectedDate = new Date(data_reserva);
+                var currentTime = now.toTimeString().substr(0, 5);
 
-                if (selectedDate.toDateString() === now.toDateString()) {
-                    var currentTime = now.getHours() * 60 + now.getMinutes();
-                    var hora_retirada = document.getElementById('hora_retirada');
-                    var options = hora_retirada.options;
-
-                    for (let i = 0; i < options.length; i++) {
-                        let time = options[i].value.split(':');
-                        let optionTime = parseInt(time[0]) * 60 + parseInt(time[1]);
-
-                        if (optionTime <= currentTime) {
-                            options[i].disabled = true;
-                        } else {
-                            options[i].disabled = false;
-                        }
-                    }
-
-                    var hora_devolucao = document.getElementById('hora_devolucao');
-                    options = hora_devolucao.options;
-
-                    for (let i = 0; i < options.length; i++) {
-                        let time = options[i].value.split(':');
-                        let optionTime = parseInt(time[0]) * 60 + parseInt(time[1]);
-
-                        if (optionTime <= currentTime) {
-                            options[i].disabled = true;
-                        } else {
-                            options[i].disabled = false;
-                        }
-                    }
+                if (dataReservaInput.value === today) {
+                    horaRetiradaInput.min = currentTime;
                 } else {
-                    var hora_retirada = document.getElementById('hora_retirada');
-                    var options = hora_retirada.options;
+                    horaRetiradaInput.min = "07:00";
+                }
+                horaDevolucaoInput.value = '';
+                horaDevolucaoInput.min = '';
+            }
 
-                    for (let i = 0; i < options.length; i++) {
-                        options[i].disabled = false;
-                    }
+            function updateHoraDevolucao() {
+                var horaRetiradaValue = horaRetiradaInput.value;
+                horaDevolucaoInput.min = horaRetiradaValue;
+            }
 
-                    var hora_devolucao = document.getElementById('hora_devolucao');
-                    options = hora_devolucao.options;
+            dataReservaInput.addEventListener('change', function() {
+                updateHoraRetirada();
+                horaRetiradaInput.value = '';
+                horaDevolucaoInput.value = '';
+            });
 
-                    for (let i = 0; i < options.length; i++) {
-                        options[i].disabled = false;
-                    }
+            horaRetiradaInput.addEventListener('change', updateHoraDevolucao);
+
+            updateHoraRetirada();
+
+            // Função para limitar o ano a 4 dígitos
+            function limitYearLength(input) {
+                if (input.value.length > 10) {
+                    input.value = input.value.slice(0, 10);
                 }
             }
 
-            document.getElementById('data_reserva').addEventListener('change', disablePastTimes);
-            disablePastTimes(); // Execute na inicialização
+            // Evento de input para limitar o ano enquanto o usuário digita
+            dataReservaInput.addEventListener('input', function() {
+                limitYearLength(this);
+            });
         });
 
         function fetchAvailableAtivos() {
@@ -254,11 +205,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <div class="container">
-        <a href="chamado/abertura_chamado.php" class="btn btn-secondary back-button">Voltar</a>
+         
         <div class="text-center">
-            <img src="logo.png" alt="Logo" class="img-fluid my-3">
+        <a href="https://sites.google.com/morumbisul.com.br/info/home/chamado">
+    <img src="logo.png" alt="Logo" class="img-fluid my-3">
+</a>
+
         </div>
         <h1 class="text-center mt-3">Reserva de Chromebook</h1>
+        <div id="error_message" class="text-danger text-center"></div>
         <form id="reservaForm" method="POST" action="reserva.php" class="mt-4">
             <div class="form-group">
                 <label for="data_reserva">Data da Reserva</label>
@@ -266,15 +221,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="form-group">
                 <label for="hora_retirada">Hora da Retirada</label>
-                <select id="hora_retirada" name="hora_retirada" class="form-control" required onchange="fetchAvailableAtivos()">
-                    <option value="">Selecione a hora</option>
-                </select>
+                <input type="time" id="hora_retirada" name="hora_retirada" class="form-control" required onchange="fetchAvailableAtivos()">
             </div>
             <div class="form-group">
                 <label for="hora_devolucao">Hora da Devolução</label>
-                <select id="hora_devolucao" name="hora_devolucao" class="form-control" required onchange="fetchAvailableAtivos()">
-                    <option value="">Selecione a hora</option>
-                </select>
+                <input type="time" id="hora_devolucao" name="hora_devolucao" class="form-control" required onchange="fetchAvailableAtivos()">
             </div>
             <div class="form-group">
                 <label for="email_username">Email do Professor</label>
@@ -304,8 +255,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </select>
             </div>
             <div class="form-group">
-                <label>Chromebook Disponíveis: <span id="ativos_disponiveis"></span></label>
-                <input type="number" name="ativos_quantidade" class="form-control" required min="1" id="ativos_quantidade">
+                <label>Quantidade de Chromebook Disponíveis: <span id="ativos_disponiveis"></span></label>
+                <input placeholder="Digite a quantidade que deseja." type="number" name="ativos_quantidade" class="form-control" required min="1" id="ativos_quantidade">
             </div>
             <button type="submit" class="btn btn-primary">Reservar</button>
         </form>
@@ -333,6 +284,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
+        function updateHoraRetirada() {
+            var dataReservaInput = document.getElementById('data_reserva');
+            var horaRetiradaInput = document.getElementById('hora_retirada');
+            var horaDevolucaoInput = document.getElementById('hora_devolucao');
+            var now = new Date();
+            var currentTime = now.toTimeString().substr(0, 5);
+
+            if (dataReservaInput.value === new Date().toISOString().split('T')[0]) {
+                horaRetiradaInput.min = currentTime;
+            } else {
+                horaRetiradaInput.min = "07:00";
+            }
+            horaRetiradaInput.value = "";
+            horaDevolucaoInput.value = "";
+            updateHoraDevolucao();
+        }
+
+        function updateHoraDevolucao() {
+            var horaRetiradaInput = document.getElementById('hora_retirada');
+            var horaDevolucaoInput = document.getElementById('hora_devolucao');
+            horaDevolucaoInput.min = horaRetiradaInput.value;
+        }
+
         document.getElementById('andar').addEventListener('change', function() {
             var andarId = this.value;
             var salaSelect = document.getElementById('sala');
@@ -354,7 +328,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php if ($reserva_success): ?>
         showModal(true, <?= $ativos_quantidade ?>, '<?= $data_reserva ?>', '<?= $hora_retirada ?>', '<?= $hora_devolucao ?>');
         <?php elseif ($reserva_error): ?>
-        showModal(false, 0, '', '', '', '<?= $error_message ?>');
+        showModal(false, 0, '', '', '', 'Quantidade indisponível para a data selecionada. Disponível: <?= $ativos_disponiveis ?> ativos.');
         <?php endif; ?>
     </script>
 </body>
