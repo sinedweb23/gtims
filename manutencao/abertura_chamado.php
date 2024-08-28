@@ -1,166 +1,55 @@
-<?php
-// Inclui o arquivo de configuração do banco de dados
-require_once('config1.php');
-
-// Inicializa a variável para armazenar a mensagem
-$mensagem = '';
-
-// Verifica se os dados do formulário foram enviados
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['abrir_chamado'])) {
-    // Obtém os dados do formulário
-    $nome_solicitante = $_POST['nome_solicitante']; // Adiciona a variável para o nome do solicitante
-    $id_sala = $_POST['id_sala'];
-    $id_defeito = $_POST['id_defeito'];
-    $observacao = mysqli_real_escape_string($conn, $_POST['observacao']);
-
-    // Insere os dados do chamado no banco de dados, incluindo o nome do solicitante
-    $sql = "INSERT INTO chamados (nome, id_sala, id_defeito, observacao) VALUES ('$nome_solicitante', '$id_sala', '$id_defeito', '$observacao')";
-    if ($conn->query($sql) === TRUE) {
-        // Define a mensagem de sucesso
-        $mensagem = "Chamado aberto com sucesso!";
-        // Redireciona para a página de confirmação após o envio do formulário
-        header("Location: confirmacao.php");
-        exit(); // Encerra o script para evitar que o restante do código seja executado após o redirecionamento.
-    } else {
-        // Se houver um erro, exibe uma mensagem de erro
-        $mensagem = "Erro ao abrir o chamado: " . $conn->error;
-    }
-}
-
-// Consulta o banco de dados para obter os andares
-$sql_andares = "SELECT id, nome FROM andares";
-$result_andares = $conn->query($sql_andares);
-
-// Consulta o banco de dados para obter os defeitos
-$sql_defeitos = "SELECT id, nome FROM defeitos";
-$result_defeitos = $conn->query($sql_defeitos);
-?>
-
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manutenção</title>
-    <!-- Link para o Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Estilo para o logo responsivo -->
+    <title>Bem-vindo ao Novo Painel</title>
     <style>
-        .logo {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            margin-bottom: 20px;
-            max-width: 100%; /* Para tornar o logo responsivo */
-            height: auto; /* Para manter a proporção */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
         }
-        footer{
-            font-size: 28px;
+        .container {
             text-align: center;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
+        h1 {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.2em;
+            }
+            a {
+                font-size: 1em;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <!-- Adiciona o botão voltar -->
-        <a href="https://sites.google.com/morumbisul.com.br/info/home/chamado" class="btn btn-secondary back-button">Voltar</a>
-        <!-- Adiciona o logo no topo -->
-        <img src="logo.png" alt="Logo" class="logo">
-        <h2 class="mb-4">Manutenção</h2>
-        <!-- Exibe a mensagem -->
-        <?php if (!empty($mensagem)): ?>
-            <div class="alert alert-<?php echo $mensagem == "Chamado aberto com sucesso!" ? "success" : "danger"; ?>" role="alert">
-                <?php echo $mensagem; ?>
-            </div>
-        <?php endif; ?>
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <div class="form-group">
-                <label for="nome_solicitante">Nome do Solicitante:</label>
-                <input type="text" name="nome_solicitante" id="nome_solicitante" class="form-control" required>
-            </div>
-            <!-- Adicione o select do andar -->
-            <div class="form-group">
-                <label for="id_andar">Andar:</label>
-                <select name="id_andar" id="id_andar" class="form-control" required>
-                    <option value="">Selecione o andar</option>
-                    <?php
-                    // Exibe as opções de andares
-                    if ($result_andares->num_rows > 0) {
-                        while($row = $result_andares->fetch_assoc()) {
-                            echo "<option value='".$row["id"]."'>".$row["nome"]."</option>";
-                        }
-                    } else {
-                        echo "<option value=''>Nenhum andar encontrado</option>";
-                    }
-                    ?>
-                </select>
-            </div>
-            <!-- Adicione o select de sala -->
-            <div class="form-group">
-                <label for="id_sala">Local:</label>
-                <select name="id_sala" id="id_sala" class="form-control" required>
-                    <option value="">Selecione o andar primeiro</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="id_defeito">Problema:</label>
-                <select name="id_defeito" id="id_defeito" class="form-control" required>
-                    <option value="">Selecione o problema</option>
-                    <?php
-                    // Exibe as opções de defeitos
-                    if ($result_defeitos->num_rows > 0) {
-                        while($row = $result_defeitos->fetch_assoc()) {
-                            echo "<option value='".$row["id"]."'>".$row["nome"]."</option>";
-                        }
-                    } else {
-                        echo "<option value=''>Nenhum defeito encontrado</option>";
-                    }
-                    ?>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="observacao">Digite o defeito:</label>
-                <textarea name="observacao" id="observacao" class="form-control" rows="3"></textarea>
-            </div>
-            <button type="submit" name="abrir_chamado" class="btn btn-primary">Abrir Chamado</button>
-            
-        </form>
+    <div class="container">
+        <h1>O sistema de abertura de chamados e reserva de Chromebook mudou.</h1>
+        <p><a href="http://morumbisul.com.br/chamado">Clique aqui para ir para o novo painel.</a></p>
     </div>
-
-    <!-- Adicione o script JavaScript para carregar as salas -->
-    <script>
-        document.getElementById('id_andar').addEventListener('change', function() {
-            var andarId = this.value;
-            var andarNome = this.options[this.selectedIndex].text; // Obter o nome do andar selecionado
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        // Limpa as opções atuais
-                        var selectSala = document.getElementById('id_sala');
-                        selectSala.innerHTML = '<option value="">Selecione a sala</option>';
-                        // Adiciona as novas opções
-                        var salas = JSON.parse(xhr.responseText);
-                        salas.forEach(function(sala) {
-                            var option = document.createElement('option');
-                            option.value = sala.id;
-                            option.textContent = sala.nome;
-                            selectSala.appendChild(option);
-                        });
-                    } else {
-                        console.error('Ocorreu um erro ao carregar as salas.');
-                    }
-                }
-            };
-            xhr.open('GET', 'get_salas.php?id_andar=' + andarId + '&andar_nome=' + encodeURIComponent(andarNome), true);
-            xhr.send();
-        });
-    </script>
-    
 </body>
 </html>
